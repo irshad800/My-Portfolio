@@ -492,174 +492,323 @@ Based in Dubai
       </div>
    </section>
    <!--<< Exprience >>-->
-
-<!-- Chat Widget CSS -->
-<style>
+<!-- Chat Widget -->
+<div class="chat-widget">
+   <!-- Chat Launch Button -->
+   <div class="chat-launch-btn" onclick="toggleChat()">💬</div>
+ 
+   <!-- Chat Popup -->
+   <div class="chat-popup" id="chatPopup">
+     <div class="chat-header">
+       Chat Support
+       <span style="cursor:pointer;" onclick="toggleChat()">✖</span>
+     </div>
+ 
+     <div class="chat-box" id="chatBox"></div>
+ 
+     <!-- Chat Input Form -->
+     <form id="chatForm" class="chat-form" enctype="multipart/form-data">
+       <div class="chat-input-area">
+         <span class="chat-icon" title="Emoji">😊</span>
+         <input type="text" id="messageInput" name="message" placeholder="Message" />
+         <label for="files" class="chat-icon" title="Attach">📎</label>
+         <input type="file" id="files" name="files" style="display: none;">
+         <span class="chat-icon" title="Camera">📷</span>
+         <button type="submit" id="sendBtn">
+           <span id="sendIcon">🎤</span>
+         </button>
+       </div>
+       <input type="hidden" name="senderId" id="senderId">
+       <input type="hidden" name="senderType" value="user">
+     </form>
+   </div>
+ </div>
+ 
+ <!-- Chat CSS -->
+ <style>
    .chat-widget {
      position: fixed;
      bottom: 20px;
      right: 20px;
      z-index: 9999;
    }
+ 
    .chat-launch-btn {
-     background-color: #ea5c27;
-     color: white;
+     background: linear-gradient(145deg, #f0f0f0, #e6e6e6);
      border-radius: 50%;
      width: 60px;
      height: 60px;
+     font-size: 24px;
      display: flex;
      align-items: center;
      justify-content: center;
-     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
      cursor: pointer;
+     transition: transform 0.3s ease;
    }
-   .chat-launch-btn img {
-     width: 36px;
-     height: 36px;
-     border-radius: 50%;
+ 
+   .chat-launch-btn:hover {
+     transform: scale(1.1);
    }
-   .chat-box {
+ 
+   .chat-popup {
+     display: none;
      position: absolute;
      bottom: 80px;
      right: 0;
-     width: 320px;
-     background: #1c1c1c;
-     border-radius: 12px;
-     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+     width: 360px;
+     max-width: 95vw;
+     max-height: 540px;
+     background: #ffffff;
+     border-radius: 16px;
      overflow: hidden;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+     flex-direction: column;
+     border: 1px solid #e0e0e0;
+     font-family: 'Poppins', sans-serif;
+     color: #000;
+     box-sizing: border-box;
+   }
+ 
+   .chat-popup.open {
      display: flex;
      flex-direction: column;
-     color: white;
-     transition: all 0.3s ease;
    }
-   .chat-box.open {
-     width: 400px;
-     height: 480px;
-   }
+ 
    .chat-header {
-     background: #000;
-     color: #fff;
-     padding: 12px 16px;
-     font-weight: 500;
-     font-size: 14px;
+     background: #f7f7f7;
+     color: #000;
+     padding: 14px 18px;
+     font-weight: 600;
+     font-size: 15px;
      display: flex;
      justify-content: space-between;
      align-items: center;
+     border-bottom: 1px solid #e0e0e0;
    }
-   .chat-body {
-     padding: 16px;
-     font-size: 14px;
-     color: #fff;
+ 
+   .chat-box {
      flex: 1;
+     padding: 16px;
      overflow-y: auto;
-     background: #222;
+     background: #ffffff;
+     color: #000;
    }
-   .chat-message {
-     margin-bottom: 10px;
-     padding: 10px;
-     border-radius: 10px;
-     max-width: 80%;
-     clear: both;
+ 
+   .msg {
+     max-width: 75%;
+     margin: 10px 0;
+     padding: 12px 16px;
+     border-radius: 12px;
+     word-wrap: break-word;
+     font-size: 14px;
+     line-height: 1.5;
+     color: #000;
    }
-   .chat-message.user {
-     background-color: #ea5c27;
-     color: white;
-     float: right;
+ 
+   .user-msg {
+     align-self: flex-end;
+     background: #e3f7dd;
+     border: 1px solid #d2e8cb;
+   }
+ 
+   .admin-msg {
+     align-self: flex-start;
+     background: #f5f5f5;
+     border: 1px solid #ddd;
+   }
+ 
+   .unread-highlight {
+     background: #fff3cd !important;
+   }
+ 
+   .status {
+     font-size: 12px;
+     color: #555;
+     margin-top: 4px;
      text-align: right;
    }
-   .chat-message.bot {
-     background-color: #444;
-     color: white;
-     float: left;
-     text-align: left;
-   }
-   .chat-footer {
-     border-top: 1px solid #444;
-     display: flex;
-     padding: 8px;
-     background: #1c1c1c;
-   }
-   .chat-footer input {
-     flex: 1;
-     padding: 8px;
-     border: none;
-     border-radius: 6px;
-     margin-right: 8px;
+ 
+   .new-divider {
+     text-align: center;
+     color: #444;
      font-size: 13px;
+     margin: 10px 0;
+     font-style: italic;
    }
-   .chat-footer button {
-     background: #ea5c27;
+ 
+   .chat-form {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     padding: 12px 16px;
+     background: #ffffff;
+     border-top: 1px solid #e0e0e0;
+   }
+ 
+   .chat-input-area {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     background: #f0f0f0;
+     padding: 8px 12px;
+     border-radius: 30px;
+     box-sizing: border-box;
+     width: 100%;
+   }
+ 
+   .chat-input-area input[type="text"] {
+     flex: 1;
+     padding: 10px 12px;
+     border: none;
+     outline: none;
+     background: transparent;
+     font-size: 14px;
+     color: #000;
+     min-width: 0;
+   }
+ 
+   .chat-input-area input::placeholder {
+     color: #999;
+   }
+ 
+   .chat-icon {
+     font-size: 20px;
+     cursor: pointer;
+     flex-shrink: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+   }
+ 
+   #sendBtn {
+     background: #25d366;
      color: white;
      border: none;
-     border-radius: 6px;
-     padding: 8px 12px;
+     border-radius: 50%;
+     width: 40px;
+     height: 40px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 18px;
      cursor: pointer;
+     flex-shrink: 0;
+     margin-left: auto;
+     transition: background 0.2s ease;
+   }
+ 
+   #sendBtn:hover {
+     background: #1da851;
    }
  </style>
  
- <!-- Chat Widget HTML -->
- <div class="chat-widget">
-   <div class="chat-box" id="chatBox">
-     <div class="chat-header">
-       Welcome back
-       <span style="cursor:pointer" onclick="toggleChat()">&times;</span>
-     </div>
-     <div class="chat-body" id="chatBody">
-       <div class="chat-message bot">Welcome back, let us know if you have any questions.</div>
-     </div>
-     <div class="chat-footer">
-       <input type="text" id="chatInput" placeholder="Write a message...">
-       <button onclick="sendMessage()">Send</button>
-     </div>
-   </div>
-   <div class="chat-launch-btn" onclick="toggleChat()">
-     <img src="assets/img/chat-icon.png" alt="chat">
-   </div>
- </div>
- 
- <!-- Chat Script -->
+ <!-- Chat JavaScript -->
  <script>
-   const chatBox = document.getElementById('chatBox');
-   const chatBody = document.getElementById('chatBody');
-   const chatInput = document.getElementById('chatInput');
+   const BASE_URL = 'http://localhost:5000/api/chat';
  
-   document.addEventListener('DOMContentLoaded', () => {
-     chatBox.style.display = 'flex';
-     chatBox.classList.remove('open');
-   });
+   const chatPopup = document.getElementById('chatPopup');
+   const chatBox = document.getElementById('chatBox');
+   const chatForm = document.getElementById('chatForm');
+   const messageInput = document.getElementById('messageInput');
+   const sendIcon = document.getElementById('sendIcon');
+   const filesInput = document.getElementById('files');
+ 
+   const senderId = localStorage.getItem('chat_user_id') || `user_${Date.now()}`;
+   localStorage.setItem('chat_user_id', senderId);
+   document.getElementById('senderId').value = senderId;
  
    function toggleChat() {
-     if (chatBox.classList.contains('open')) {
-       chatBox.classList.remove('open');
-       chatBox.style.width = '320px';
-       chatBox.style.height = 'auto';
-     } else {
-       chatBox.classList.add('open');
-       chatBox.style.display = 'flex';
+     chatPopup.classList.toggle('open');
+   }
+ 
+   messageInput.addEventListener('input', () => {
+     const hasText = messageInput.value.trim().length > 0;
+     sendIcon.textContent = hasText ? '📤' : '🎤';
+   });
+ 
+   async function markAdminMessagesRead() {
+     await fetch(`${BASE_URL}/user-mark-read/${senderId}`, { method: 'PUT' });
+   }
+ 
+   async function loadMessages() {
+     const res = await fetch(`${BASE_URL}/messages/${senderId}`);
+     const messages = await res.json();
+     chatBox.innerHTML = '';
+ 
+     let newMessagesInserted = false;
+     const firstUnreadIndex = messages.findIndex(
+       (m) => m.senderType === 'admin' && !m.read
+     );
+ 
+     messages.forEach((msg, index) => {
+       if (!newMessagesInserted && index === firstUnreadIndex && msg.senderType === 'admin') {
+         const divider = document.createElement('div');
+         divider.className = 'new-divider';
+         divider.innerHTML = '<hr><div>New Messages</div><hr>';
+         chatBox.appendChild(divider);
+         newMessagesInserted = true;
+       }
+ 
+       const div = document.createElement('div');
+       div.className = 'msg ' + (msg.senderType === 'admin' ? 'admin-msg' : 'user-msg');
+       if (!msg.read && msg.senderType === 'admin') {
+         div.classList.add('unread-highlight');
+       }
+ 
+       div.innerHTML = `
+         ${msg.message || ''}
+         ${msg.fileUrl ? `<br><a href="${msg.fileUrl}" target="_blank">📎 File</a>` : ''}
+       `;
+       chatBox.appendChild(div);
+ 
+       const isLastUserMsg = msg.senderType === 'user' &&
+         [...messages].reverse().find((m) => m.senderType === 'user') === msg;
+ 
+       if (isLastUserMsg) {
+         const status = msg.read ? '✅ Read' : '🕓 Sent';
+         const statusDiv = document.createElement('div');
+         statusDiv.className = 'status';
+         statusDiv.textContent = status;
+         chatBox.appendChild(statusDiv);
+       }
+     });
+ 
+     chatBox.scrollTop = chatBox.scrollHeight;
+   }
+ 
+   chatForm.addEventListener('submit', async (e) => {
+     e.preventDefault();
+ 
+     const formData = new FormData(chatForm);
+     const hasMessage = messageInput.value.trim().length > 0;
+     const hasFile = filesInput.files.length > 0;
+ 
+     if (!hasMessage && !hasFile) {
+       alert('Please enter a message or select a file.');
+       return;
      }
-   }
  
-   function sendMessage() {
-     const message = chatInput.value.trim();
-     if (!message) return;
+     await fetch(`${BASE_URL}/send`, {
+       method: 'POST',
+       body: formData
+     });
  
-     const msgDiv = document.createElement('div');
-     msgDiv.className = 'chat-message user';
-     msgDiv.textContent = message;
-     chatBody.appendChild(msgDiv);
-     chatInput.value = '';
-     chatBody.scrollTop = chatBody.scrollHeight;
+     chatForm.reset();
+     sendIcon.textContent = '🎤';
+     await loadMessages();
+   });
  
-     // Simulate reply (optional)
-     setTimeout(() => {
-       const replyDiv = document.createElement('div');
-       replyDiv.className = 'chat-message bot';
-       replyDiv.textContent = 'Thank you! We will get back to you shortly.';
-       chatBody.appendChild(replyDiv);
-       chatBody.scrollTop = chatBody.scrollHeight;
-     }, 1000);
-   }
+   (async function initChat() {
+     await markAdminMessagesRead();
+     await loadMessages();
+     setInterval(async () => {
+       await markAdminMessagesRead();
+       await loadMessages();
+     }, 3000);
+   })();
  </script>
+ 
  
 
 
