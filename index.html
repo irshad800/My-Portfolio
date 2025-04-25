@@ -24,6 +24,134 @@
 
 <body>
 
+
+
+
+
+<!-- Language Switcher -->
+<div class="language-switcher" id="langDesktop">
+   <select id="languageSelect" onchange="changeLanguage()">
+     <option value="en">EN</option>
+     <option value="ar">AR</option>
+     <option value="hi">HI</option>
+     <option value="zh">ZH</option>
+     <option value="ru">RU</option>
+   </select>
+ </div>
+ 
+ <!-- For Mobile Menu -->
+ <li class="language-menu" id="langMobile">
+   <select id="languageSelectMobile" onchange="changeLanguage(true)">
+     <option value="en">EN</option>
+     <option value="ar">AR</option>
+     <option value="hi">HI</option>
+     <option value="zh">ZH</option>
+     <option value="ru">RU</option>
+   </select>
+ </li>
+ 
+ <style>
+/* Desktop Language Switcher */
+.language-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 6px;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.language-switcher select,
+.language-menu select {
+  font-size: 14px;
+  padding: 6px 10px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Responsive Toggle */
+@media (max-width: 767px) {
+  .language-switcher {
+    display: none;
+  }
+  .language-menu {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .language-menu {
+    display: none;
+  }
+}
+
+
+   </style>
+   
+ 
+
+
+
+   <script>
+      const translations = {
+        en: {
+          greeting: "Hi, I’m MUHAMMED IRSHAD",
+          role: "Full-Stack Developer & Designer Specializing in Mobile & Web",
+          available: "Available for work",
+        },
+        ar: {
+          greeting: "مرحباً، أنا محمد إرشاد",
+          role: "مطور ومصمم شامل متخصص في تطبيقات الويب والموبايل",
+          available: "متاح للعمل",
+        },
+        hi: {
+          greeting: "नमस्ते, मैं मुहम्मद इरशाद हूँ",
+          role: "मोबाइल और वेब में विशेषज्ञता वाला फुल-स्टैक डेवलपर और डिज़ाइनर",
+          available: "काम के लिए उपलब्ध",
+        },
+        zh: {
+          greeting: "你好，我是穆罕默德·伊尔沙德",
+          role: "全栈开发者和设计师，专注于移动和网页",
+          available: "可工作",
+        },
+        ru: {
+          greeting: "Привет, я МУХАММЕД ИРШАД",
+          role: "Фулстек разработчик и дизайнер, специализирующийся на вебе и мобильных",
+          available: "Доступен для работы",
+        }
+      };
+      
+      function changeLanguage(isMobile = false) {
+        const lang = isMobile
+          ? document.getElementById("languageSelectMobile").value
+          : document.getElementById("languageSelect").value;
+      
+        document.querySelectorAll("[data-translate]").forEach(el => {
+          const key = el.getAttribute("data-translate");
+          if (translations[lang] && translations[lang][key]) {
+            el.innerText = translations[lang][key];
+          }
+        });
+      
+        // Sync both dropdowns
+        document.getElementById("languageSelect").value = lang;
+        document.getElementById("languageSelectMobile").value = lang;
+      }
+      </script>
+      
+
+
+
+
+
+
+
+
    <!--<< Preloader >>-->
    <div class="preloader__Dixon">
       <div class="box text-center">
@@ -205,11 +333,121 @@ Based in Dubai
                </li>
             </ul>
             <div class="text-center">
-               <div class="text-center">
-                  <a href="assets/Irshad Software Developer ae.pdf" class="cv-btn" download>
-                    Download CV
-                  </a>
-                </div>
+              <!-- CV Download Button -->
+<div class="text-center">
+   <button class="cv-btn" onclick="openCVModal()">Download CV</button>
+ </div>
+ 
+ <!-- Popup Modal -->
+ <div id="cvModal" class="cv-modal">
+   <div class="cv-modal-content animate-zoom">
+     <span class="cv-close" onclick="closeCVModal()">&times;</span>
+     <h5 class="cv-title">Please select the language in which you would like to download the CV.</h5>
+     <div class="cv-options">
+       <a href="assets/Irshad Software Developer ae.pdf" download class="cv-btn">English</a>
+       <a href="assets/Irshad Software Developer ar.pdf" download class="cv-btn">Arabic</a>
+       <a href="assets/Irshad Software Developer fr.pdf" download class="cv-btn">French</a>
+       <a href="assets/Irshad Software Developer hi.pdf" download class="cv-btn">Hindi</a>
+     </div>
+   </div>
+ </div>
+ 
+ <!-- CSS Styling + Animations -->
+ <style>
+   .cv-btn {
+     padding: 10px 20px;
+     margin: 6px;
+     background: linear-gradient(135deg, #007bff, #0056b3);
+     color: white;
+     border: none;
+     border-radius: 30px;
+     font-weight: bold;
+     text-decoration: none;
+     display: inline-block;
+     cursor: pointer;
+     transition: transform 0.3s, box-shadow 0.3s;
+   }
+ 
+   .cv-btn:hover {
+     transform: translateY(-3px);
+     box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+   }
+ 
+   .cv-modal {
+     display: none;
+     position: fixed;
+     z-index: 999;
+     left: 0; top: 0;
+     width: 100%; height: 100%;
+     background-color: rgba(0, 0, 0, 0.6);
+     animation: fadeIn 0.4s ease;
+   }
+ 
+   .cv-modal-content {
+     background-color: #fff;
+     margin: 10% auto;
+     padding: 30px 20px;
+     width: 90%;
+     max-width: 450px;
+     border-radius: 15px;
+     text-align: center;
+     position: relative;
+     animation: zoomIn 0.5s ease;
+   }
+ 
+   .cv-close {
+     position: absolute;
+     top: 12px; right: 20px;
+     font-size: 22px;
+     font-weight: bold;
+     color: #333;
+     cursor: pointer;
+   }
+ 
+   .cv-title {
+     font-size: 16px;
+     margin-bottom: 20px;
+     color: #333;
+   }
+ 
+   .cv-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; /* Adds space between each button */
+  margin-top: 20px;
+}
+ 
+   /* Animations */
+   @keyframes zoomIn {
+     from { transform: scale(0.7); opacity: 0; }
+     to { transform: scale(1); opacity: 1; }
+   }
+ 
+   @keyframes fadeIn {
+     from { opacity: 0; }
+     to { opacity: 1; }
+   }
+ </style>
+ 
+ <!-- JavaScript -->
+ <script>
+   function openCVModal() {
+     document.getElementById('cvModal').style.display = 'block';
+   }
+ 
+   function closeCVModal() {
+     document.getElementById('cvModal').style.display = 'none';
+   }
+ 
+   window.onclick = function(event) {
+     const modal = document.getElementById('cvModal');
+     if (event.target === modal) {
+       modal.style.display = 'none';
+     }
+   }
+ </script>
+ 
                 
               
                </a>
@@ -773,17 +1011,11 @@ Based in Dubai
  
        const div = document.createElement('div');
        div.className = 'msg ' + (msg.senderType === 'admin' ? 'admin-msg' : 'user-msg');
- 
        if (!msg.read && msg.senderType === 'admin') {
          div.classList.add('unread-highlight');
- 
-         const badge = document.createElement('div');
-         badge.textContent = 'Unread';
-         badge.style = 'font-size: 10px; color: #d00; margin-top: 4px;';
-         div.appendChild(badge);
        }
  
-       div.innerHTML += `
+       div.innerHTML = `
          ${msg.message || ''}
          ${msg.fileUrl ? `<br><a href="${msg.fileUrl}" target="_blank">📎 File</a>` : ''}
        `;
@@ -824,15 +1056,14 @@ Based in Dubai
      chatForm.reset();
      sendIcon.textContent = '🎤';
      await loadMessages();
-     await markAdminMessagesRead();
    });
  
    (async function initChat() {
-     await loadMessages(); // First show messages
-     await markAdminMessagesRead(); // Then mark read
+     await markAdminMessagesRead();
+     await loadMessages();
      setInterval(async () => {
-       await loadMessages();
        await markAdminMessagesRead();
+       await loadMessages();
      }, 3000);
    })();
  </script>
