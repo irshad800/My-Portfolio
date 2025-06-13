@@ -161,6 +161,50 @@
       </div>
    </div>
    <!--<< Preloader >>-->
+<div id="chatSupportPopup" style="
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background: #333;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 9999;
+  display: none;
+">
+  <span>💬 Chat Support is available</span>
+  <button onclick="closeChatPopup()" style="
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+  ">&times;</button>
+</div>
+<script>
+  function showChatPopup() {
+    const popup = document.getElementById('chatSupportPopup');
+    popup.style.display = 'block';
+    setTimeout(() => {
+      closeChatPopup();
+    }, 5000); // Auto-close after 5 seconds
+  }
+
+  function closeChatPopup() {
+    const popup = document.getElementById('chatSupportPopup');
+    popup.style.display = 'none';
+  }
+
+  // Show it only once per visit (optional)
+  window.addEventListener('load', () => {
+    if (!sessionStorage.getItem('chatPopupShown')) {
+      showChatPopup();
+      sessionStorage.setItem('chatPopupShown', 'true');
+    }
+  });
+</script>
 
 
 
@@ -190,29 +234,29 @@
                   <li class="menu-border"></li>
                   <li>
                      <a href="#reprot">
-                        Resume
-                     </a>
+                        Education & Experience
+                                          </a>
                   </li>
                   <li class="menu-border"></li>
                   <li>
                      <a href="#skill">
-                        Stact
+                     Professional Skills
                      </a>
                   </li>
                   <li class="menu-border"></li>
                   <li>
                      <a href="#serv">
-                        Services
+                     Technical Expertise
                      </a>
                   </li>
                   <li class="menu-border"></li>
                   <li>
-                     <a href="#ports">
-                        Protfolio
+                     <a href="#projects">
+                        Projects
                      </a>
                   </li>
                   <li class="menu-border"></li>
-                  <li>
+                  <!-- <li>
                      <a href="#testi">
                         Client
                      </a>
@@ -222,7 +266,7 @@
                      <a href="#blogs">
                         Insight
                      </a>
-                  </li>
+                  </li> -->
                   <li class="menu-border"></li>
                   <li>
                      <a href="#conts">
@@ -264,7 +308,7 @@ Based in Dubai
             <div class="banner-counter">
                <div class="counter-bitem">
                   <span class="stor-tilecount">
-                     2+
+                     2.5+
                   </span>
                   <span class="pra-clr">
                      Years in the
@@ -298,6 +342,10 @@ Based in Dubai
                 </div>
                 
             </div>
+
+
+
+
          </div>
          <div class="hero-right-wrap cmn-shadow">
             <div class="prof-head d-flex align-items-center justify-content-center">
@@ -306,7 +354,7 @@ Based in Dubai
                </span>
             </div>
             <div class="profile-img d-block">
-               <img src="assets/img/banner/banner-profile.png" alt="img" class="round10">
+               <img src="assets\img\resize-17498172211248203869irscoat.jpg" alt="img" class="round10">
             </div>
             <span class="d-block text-center fw-500 white" style="font-size: 14px;">
                irshadvp800@gmail.com
@@ -344,10 +392,10 @@ Based in Dubai
      <span class="cv-close" onclick="closeCVModal()">&times;</span>
      <h5 class="cv-title">Please select the language in which you would like to download the CV.</h5>
      <div class="cv-options">
-       <a href="assets/Irshad Software Developer ae.pdf" download class="cv-btn">English</a>
-       <a href="assets/Irshad Software Developer ar.pdf" download class="cv-btn">Arabic</a>
-       <a href="assets/Irshad Software Developer fr.pdf" download class="cv-btn">French</a>
-       <a href="assets/Irshad Software Developer hi.pdf" download class="cv-btn">Hindi</a>
+       <a href="Irshad Software Developer uae (1).pdf" download class="cv-btn">English</a>
+       <a href="Irshad Software Developer uae (1).pdf" download class="cv-btn">Arabic</a>
+       <a href="Irshad Software Developer uae (1).pdf" download class="cv-btn">French</a>
+       <a href="Irshad Software Developer uae (1).pdf" download class="cv-btn">Hindi</a>
      </div>
    </div>
  </div>
@@ -495,9 +543,10 @@ Based in Dubai
                   </div>
                   <div class="about-content-inner d-flex justify-content-end">
                      <div class="boxes">
-                        <a href="#" class="arrow">
-                           <img src="assets/img/blog/arrow-down.png" alt="img">
-                        </a>
+                       <a href="#" class="arrow">
+  <img src="assets/img/blog/arrow-down.png" alt="img" class="fit-img" />
+</a>
+
                         <div class="right-comp">
                            <p class="pra-clr">
                               Turning ideas into intelligent digital solutions — from sleek websites to scalable mobile apps. With over 2 years in the tech scene and currently building in Dubai, I merge full-stack development with cloud expertise to craft seamless, user-focused products that make an impact.
@@ -1439,7 +1488,7 @@ Based in Dubai
     </div>
 
     <div class="service-hoverbox d-flex justify-content-center mt-5">
-      <a href="service.html" class="hover-circle cmborder wow fadeInUp" data-wow-duration="1.6s">
+      <a href="https://github.com/irshad800?tab=repositories" class="hover-circle cmborder wow fadeInUp" data-wow-duration="1.6s">
         <span class="box">
           <i class="bi bi-arrow-up-right"></i>
           <span class="textmore">
@@ -1451,6 +1500,130 @@ Based in Dubai
   </div>
 </section>
 
+<section class="quality-section check-box-style mb-common pt-100 pb-100" id="projects">
+  <div class="container">
+    <div class="cus__mb60 d-md-flex d-grid align-items-end justify-content-between gap-3">
+      <div class="section-title">
+        <span class="section-sub" data-aos="fade-down" data-aos-duration="1000">
+          Portfolio Highlights
+        </span>
+        <h2 class="stitle fw-500 mt-3" data-aos="fade-down" data-aos-duration="1500">
+          My Recent
+          <span class="text-storkes d-block">Projects</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Project 1 -->
+      <div class="col-lg-6 col-md-12">
+        <div class="quality-work-items cmn-shadow round8 h-100">
+          <h3 class="white">
+            Wish I Club Membership Website
+            <a href="https://wishiclub.com" target="_blank" class="text-warning">wishiclub.com</a> |
+            <a href="https://github.com/irshad800/WISHICLUB" class="text-info">Source Code</a>
+          </h3>
+          <p class="mt-2"><strong>Duration:</strong> Mar 2025 – Jun 2024</p>
+          <p><strong>Tech Stack:</strong> Node.js, Express.js, REST APIs, MongoDB, HTML, CSS, JavaScript, Bootstrap</p>
+          <ul class="label-exlist">
+            <li>Individually built a premium membership platform with 10 card packages.</li>
+            <li>Developed full user/admin dashboards, bookings, and REST APIs with CRUD.</li>
+            <li>Integrated Stripe & NOWPayments for card/crypto payments.</li>
+            <li>Implemented SMTP email verification system.</li>
+            <li>Created 30+ responsive pages, hosted via Tasjeel and Register.lk.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="col-lg-6 col-md-12">
+        <div class="quality-work-items cmn-shadow round8 h-100">
+          <h3 class="white">
+            Prime Wish – Bulk Product Trading Platform
+            <a href="https://primewish.ae" target="_blank" class="text-warning">primewish.ae</a> |
+            <a href="https://github.com/irshad800/wishprime" class="text-info">Source Code</a>
+          </h3>
+          <p class="mt-2"><strong>Duration:</strong> Dec 2024 – Feb 2024</p>
+          <p><strong>Tech Stack:</strong> Node.js, Express.js, REST APIs, MongoDB, HTML, CSS, JavaScript, Bootstrap</p>
+          <ul class="label-exlist">
+            <li>Built backend fully and 70% of frontend for fruits, vegetables & dry goods platform.</li>
+            <li>Developed dashboards, bookings, auth, and full CRUD REST APIs.</li>
+            <li>Integrated PayTabs & SMTP for payments & verification.</li>
+            <li>Created 28+ responsive pages, hosted on Tasjeel and Register.lk.</li>
+            <li>Implemented real-time chat with file uploads and notifications.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="col-lg-6 col-md-12">
+        <div class="quality-work-items cmn-shadow round8 h-100">
+          <h3 class="white">
+            Shoe Selling ECommerce Mobile App |
+            <a href="https://github.com/irshad800/Aspen_shoes" class="text-info">Source Code</a>
+          </h3>
+          <p class="mt-2"><strong>Duration:</strong> Dec 2024 – Feb 2024</p>
+          <p><strong>Tech Stack:</strong> Node.js, Express.js, Flutter, Firebase, REST APIs</p>
+          <ul class="label-exlist">
+            <li>Built Flutter eCommerce app with MVVM: browse, cart, checkout.</li>
+            <li>Integrated Chatbot and AI features for enhanced UX.</li>
+            <li>Used Node.js backend with MongoDB and SharedPreferences for storage.</li>
+            <li>Used Provider for scalable app state management.</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Project 4 -->
+<div class="col-lg-6 col-md-12">
+  <div class="quality-work-items cmn-shadow round8 h-100">
+    <h3 class="white">
+      GROCERY SELLING SHOP APP |
+      <a href="https://github.com/irshad800/Groccery_selling_App" target="_blank" class="text-info">Source Code</a>
+    </h3>
+    <p class="mt-2"><strong>Duration:</strong> April 2024 – Jul 2024</p>
+    <p><strong>Tech Stack:</strong> Flutter, Firebase, Firestore, HTTP, SharedPreferences</p>
+    <ul class="label-exlist">
+      <li>Integrated Firebase Authentication and Firestore for backend services.</li>
+      <li>Used SharedPreferences for local storage management.</li>
+      <li>Implemented Provider for state management and HTTP for APIs.</li>
+      <li>Added Lottie animations for interactive UI.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Project 5 -->
+<div class="col-lg-6 col-md-12">
+  <div class="quality-work-items cmn-shadow round8 h-100">
+    <h3 class="white">
+      OPTICAL STORE MANAGEMENT SYSTEM |
+      <a href="https://github.com/irshad800/Optical_Store_Management_System" target="_blank" class="text-info">Source Code</a>
+    </h3>
+    <p class="mt-2"><strong>Duration:</strong> Feb 2024 – April 2024</p>
+    <p><strong>Tech Stack:</strong> Flutter, MongoDB, Node.js</p>
+    <ul class="label-exlist">
+      <li>Built a client-based optical store app with MVC architecture.</li>
+      <li>Integrated MongoDB and Node.js for backend operations.</li>
+      <li>Implemented robust exception handling and error feedback.</li>
+      <li>Streamlined prescription and purchasing workflows.</li>
+    </ul>
+  </div>
+</div>
+
+
+    </div>
+
+    
+
+    <div class="service-hoverbox d-flex justify-content-center mt-5">
+      <a href="https://github.com/irshad800?tab=repositories" class="hover-circle cmborder wow fadeInUp" data-wow-duration="1.6s">
+        <span class="box">
+          <i class="bi bi-arrow-up-right"></i>
+          <span class="textmore">See All Projects</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
 
    <!--<< Working Depend >>-->
 
@@ -1491,7 +1664,7 @@ Based in Dubai
    <!--<< Sponsor >>-->
 
    <!--<< Working >>-->
-   <section class="working-section check-box-style mb-common pt-100 pb-100" id="ports">
+   <!-- <section class="working-section check-box-style mb-common pt-100 pb-100" id="ports">
       <div class="container">
          <div class="cus__mb60  d-md-flex d-grid align-items-center justify-content-between gap-3">
             <div class="section-title">
@@ -1628,11 +1801,11 @@ Based in Dubai
             </div>
          </div>
       </div>
-   </section>
+   </section> -->
    <!--<< Working >>-->
 
    <!--<< testimonial >>-->
-   <section class="testimonial-section-v1 check-box-style mb-common pt-100 pb-100" id="testi">
+   <!-- <section class="testimonial-section-v1 check-box-style mb-common pt-100 pb-100" id="testi">
       <div class="container">
          <div class="section-title text-center mb-60">
             <span class="section-sub" data-aos="fade-down" data-aos-duration="1000">
@@ -1809,11 +1982,11 @@ Based in Dubai
             </div>
          </div>
       </div>
-   </section>
+   </section> -->
    <!--<< testimonial >>-->
 
    <!--<< blog >>-->
-   <section class="blog-section check-box-style mb-common pt-100 pb-100" id="blogs">
+   <!-- <section class="blog-section check-box-style mb-common pt-100 pb-100" id="blogs">
       <div class="container">
          <div class="cus__mb60  d-md-flex d-grid align-items-center justify-content-between gap-3">
             <div class="section-title">
@@ -1948,7 +2121,7 @@ Based in Dubai
             </div>
          </div>
       </div>
-   </section>
+   </section> -->
    <!--<< blog >>-->
 
    <!--<<  Footer >>-->
