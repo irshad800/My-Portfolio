@@ -1613,7 +1613,7 @@ Designed and implemented responsive UI using Razor Pages, Blazor, and React.js, 
     <div class="service-hoverbox d-flex justify-content-center mt-5">
       <a href="https://github.com/irshad800?tab=repositories" class="hover-circle cmborder wow fadeInUp" data-wow-duration="1.6s">
         <span class="box">
-          <i class="bi bi-arrow-up-right"></i>
+          <i class="bi bi-arrow-up-right"></i>  
           <span class="textmore">
             View All Projects
           </span>
@@ -1878,7 +1878,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   messageBox.style.color = '#555';
 
   try {
-    const response = await fetch('http://localhost:5000/api/contact', {
+    const response = await fetch('https://portfoliobackend-39ou.onrender.com/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
