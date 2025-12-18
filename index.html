@@ -4,6 +4,7 @@
 <!--<< Header Area >>-->
 
 <head>
+    <!-- Existing head content remains the same -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,17 @@
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/aos.css">
     <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        /* Add RTL support for Arabic */
+        body[dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+        body[dir="rtl"] .text-center { text-align: center; }
+        body[dir="rtl"] .justify-content-end { justify-content: start; }
+        /* Add more RTL adjustments if needed for layout flips */
+        @media (max-width: 767px) { /* Mobile adjustments if necessary */ }
+    </style>
 </head>
 
 <!--<< Body Area >>-->
@@ -31,9 +43,7 @@
    <select id="languageSelect" onchange="changeLanguage()">
      <option value="en">EN</option>
      <option value="ar">AR</option>
-     <option value="hi">HI</option>
-     <option value="zh">ZH</option>
-     <option value="ru">RU</option>
+     
    </select>
  </div>
  
@@ -42,9 +52,7 @@
    <select id="languageSelectMobile" onchange="changeLanguage(true)">
      <option value="en">EN</option>
      <option value="ar">AR</option>
-     <option value="hi">HI</option>
-     <option value="zh">ZH</option>
-     <option value="ru">RU</option>
+     
    </select>
  </li>
  
@@ -95,54 +103,141 @@
 
 
 
-   <script>
-      const translations = {
-        en: {
-          greeting: "Hi, I’m MUHAMMED IRSHAD",
-          role: "Full-Stack Developer & Designer Specializing in Mobile & Web",
-          available: "Available for work",
-        },
-        ar: {
-          greeting: "مرحباً، أنا محمد إرشاد",
-          role: "مطور ومصمم شامل متخصص في تطبيقات الويب والموبايل",
-          available: "متاح للعمل",
-        },
-        hi: {
-          greeting: "नमस्ते, मैं मुहम्मद इरशाद हूँ",
-          role: "मोबाइल और वेब में विशेषज्ञता वाला फुल-स्टैक डेवलपर और डिज़ाइनर",
-          available: "काम के लिए उपलब्ध",
-        },
-        zh: {
-          greeting: "你好，我是穆罕默德·伊尔沙德",
-          role: "全栈开发者和设计师，专注于移动和网页",
-          available: "可工作",
-        },
-        ru: {
-          greeting: "Привет, я МУХАММЕД ИРШАД",
-          role: "Фулстек разработчик и дизайнер, специализирующийся на вебе и мобильных",
-          available: "Доступен для работы",
-        }
-      };
       
-      function changeLanguage(isMobile = false) {
-        const lang = isMobile
-          ? document.getElementById("languageSelectMobile").value
-          : document.getElementById("languageSelect").value;
-      
-        document.querySelectorAll("[data-translate]").forEach(el => {
-          const key = el.getAttribute("data-translate");
-          if (translations[lang] && translations[lang][key]) {
-            el.innerText = translations[lang][key];
-          }
-        });
-      
-        // Sync both dropdowns
-        document.getElementById("languageSelect").value = lang;
-        document.getElementById("languageSelectMobile").value = lang;
-      }
-      </script>
-      
-
+<script>
+function changeLanguage(isMobile = false) {
+    const select = isMobile ? document.getElementById('languageSelectMobile') : document.getElementById('languageSelect');
+    const lang = select.value;
+    
+    if (lang === 'ar') {
+        document.documentElement.lang = 'ar';
+        document.body.dir = 'rtl';
+        
+        // Banner Section
+        document.querySelector('.fz-20.fw-500.white.dixon').innerText = 'مرحباً، أنا محمد إرشاد ،';
+        document.querySelector('.banner-middle h1.white').innerHTML = 'مطور ومصمم كامل المكدس<BR>متخصص في التطبيقات المتنقلة والويب<BR><BR>مقيم في دبي';
+        document.querySelector('.banner-middle p.pra-clr').innerText = 'أتخصص في تطوير الواجهة الأمامية والخلفية، أنظمة السحابة، قواعد البيانات، وتجربة المستخدم/واجهة المستخدم — مزجاً بين التكنولوجيا والتصميم لبناء تجارب رقمية قابلة للتوسع وسلسة.';
+        document.querySelector('.ab-btn').innerHTML = '<span style="display: inline-block; width: 10px; height: 10px; background-color: green; border-radius: 50%; margin-left: 8px;"></span>متاح للعمل';
+        
+        // Counters
+        document.querySelectorAll('.counter-bitem .pra-clr')[0].innerHTML = 'سنوات في <span class="d-block">صناعة التكنولوجيا</span>';
+        document.querySelectorAll('.counter-bitem .pra-clr')[1].innerHTML = 'مشاريع <span class="d-block">مكتملة</span>';
+        document.querySelectorAll('.counter-bitem .pra-clr')[2].innerHTML = 'عملاء سعداء <span class="d-block">في الإمارات</span>';
+        
+        // Profile
+        document.querySelector('.prof-head span').innerText = 'الملف الشخصي:';
+        document.querySelector('.hero-right-wrap span.white').innerHTML = 'irshadvp800@gmail.com <span class="d-block" style="font-size: 18px;">مقيم في دبي،</span>';
+        
+        // Navigation Menu
+        document.querySelectorAll('.main-menu a')[0].innerText = 'الرئيسية';
+        document.querySelectorAll('.main-menu a')[1].innerText = 'عني';
+        document.querySelectorAll('.main-menu a')[2].innerText = 'التعليم والخبرة';
+        document.querySelectorAll('.main-menu a')[3].innerText = 'المهارات المهنية';
+        document.querySelectorAll('.main-menu a')[4].innerText = 'الخبرة التقنية';
+        document.querySelectorAll('.main-menu a')[5].innerText = 'المشاريع';
+        document.querySelectorAll('.main-menu a')[6].innerText = 'تواصل معنا';
+        
+        // About Me
+        document.querySelector('#about .section-sub').innerText = 'عني';
+        document.querySelector('#about h3').innerText = 'أنا مطور برمجيات مع أكثر من 3 سنوات خبرة في التطوير الكامل المكدس والسحابي، أبني حلولاً قابلة للتوسع لشركات رائدة وأقدم تقنيات مؤثرة.';
+        document.querySelector('#about h2.stitle').innerHTML = 'صنع تجارب رقمية <span class="text-storkes d-block">فنية ومبتكرة</span>';
+        document.querySelector('.about-content-inner p.pra-clr').innerText = 'تحويل الأفكار إلى حلول رقمية ذكية — من مواقع إلكترونية أنيقة إلى تطبيقات متنقلة قابلة للتوسع. مع أكثر من سنتين في مجال التقنية وحالياً أبني في دبي، أدمج تطوير كامل المكدس مع خبرة السحابة لصنع منتجات سلسة تركز على المستخدم وتترك أثراً.';
+        document.querySelector('.about-content-inner .textmore').innerText = 'عني';
+        
+        // Timeline (Education & Experience)
+        document.querySelector('#reprot .section-sub').innerText = 'الفترة الزمنية';
+        document.querySelector('#reprot h2.stitle').innerHTML = 'خبرة عملي <span class="text-storkes d-block">وتعليمي</span>';
+        
+        // Experience Items
+        document.querySelectorAll('#reprot .educa-head h4 a')[0].innerHTML = 'مطور كامل المكدس ومصمم واجهة مستخدم/تجربة مستخدم,<br>Wish Media Network<br>دبي، الإمارات';
+        document.querySelectorAll('#reprot .educa-head h4 a')[1].innerHTML = 'مطور تطبيقات متنقلة كامل المكدس,<br>Maitexa IT Solution<br>كيرالا، الهند';
+        document.querySelectorAll('#reprot .educa-head h4 a')[2].innerHTML = 'متدرب مطور ويب كامل المكدس,<br>Techolas Technology<br>كيرالا، الهند';
+        document.querySelectorAll('#reprot .educa-head h4 a')[3].innerHTML = 'ماجستير في تطبيقات الحاسوب,<br>جامعة APJ Abdul Kalam التكنولوجية<br>كيرالا، الهند';
+        document.querySelectorAll('#reprot .educa-head h4 a')[4].innerHTML = 'بكالوريوس علوم الحاسوب,<br>جامعة كاليكوت<br>كيرالا، الهند';
+        
+        // Professional Skills
+        document.querySelector('#skill .section-sub').innerText = 'المهارات المهنية';
+        document.querySelector('#skill h2.stitle').innerHTML = 'أصنع تجارب رقمية رائعة <span class="text-strokes d-block">للعلامات التجارية</span>';
+        
+        // Skill Names (sub-wu)
+        document.querySelectorAll('#skill .sub-wu')[0].innerText = 'Node.js';
+        document.querySelectorAll('#skill .sub-wu')[1].innerText = 'Express.js';
+        document.querySelectorAll('#skill .sub-wu')[2].innerText = 'واجهات برمجة التطبيقات REST';
+        document.querySelectorAll('#skill .sub-wu')[3].innerText = 'React.js';
+        document.querySelectorAll('#skill .sub-wu')[4].innerText = 'Next.js';
+        document.querySelectorAll('#skill .sub-wu')[5].innerText = 'HTML / CSS / JS';
+        document.querySelectorAll('#skill .sub-wu')[6].innerText = 'Flutter (تطبيقات متنقلة)';
+        document.querySelectorAll('#skill .sub-wu')[7].innerText = 'Docker';
+        document.querySelectorAll('#skill .sub-wu')[8].innerText = 'CI/CD وأتمتة';
+        document.querySelectorAll('#skill .sub-wu')[9].innerText = 'MongoDB (NoSQL)';
+        document.querySelectorAll('#skill .sub-wu')[10].innerText = 'SQL (علائقي)';
+        document.querySelectorAll('#skill .sub-wu')[11].innerText = 'Firebase';
+        document.querySelectorAll('#skill .sub-wu')[12].innerText = 'سحابة AWS';
+        document.querySelectorAll('#skill .sub-wu')[13].innerText = 'منهجية Agile وScrum';
+        document.querySelectorAll('#skill .sub-wu')[14].innerText = 'النشر والهندسة المعمارية';
+        
+        // Technical Expertise
+        document.querySelector('#serv .section-sub').innerText = 'الخبرة التقنية';
+        document.querySelector('#serv h2.stitle').innerHTML = 'قدراتي تمتد عبر <span class="text-storkes d-block">تقنيات متنوعة</span>';
+        
+        // Expertise Headings
+        document.querySelectorAll('#serv h3.white')[0].innerText = 'تطوير الواجهة الأمامية';
+        document.querySelectorAll('#serv h3.white')[1].innerText = 'تطوير التطبيقات المتنقلة';
+        document.querySelectorAll('#serv h3.white')[2].innerText = 'تطوير الخلفية';
+        document.querySelectorAll('#serv h3.white')[3].innerText = 'السحابة، الحاويات وDevOps';
+        document.querySelectorAll('#serv h3.white')[4].innerText = 'نظام الدردشة وتكامل البوت';
+        document.querySelectorAll('#serv h3.white')[5].innerText = 'تكامل بوابات الدفع';
+        document.querySelectorAll('#serv h3.white')[6].innerText = 'الاستضافة والنشر';
+        document.querySelectorAll('#serv h3.white')[7].innerText = 'التحليلات والمراقبة';
+        document.querySelectorAll('#serv h3.white')[8].innerText = 'الهندسة المعمارية والمنهجيات';
+        
+        document.querySelector('#serv .textmore').innerText = 'عرض جميع المشاريع';
+        
+        // Projects
+        document.querySelector('#projects .section-sub').innerText = 'أبرز المشاريع';
+        document.querySelector('#projects h2.stitle').innerHTML = 'مشاريع مجموعتنا <span class="text-storkes d-block">الحديثة</span>';
+        document.querySelector('#projects .textmore').innerText = 'عرض جميع المشاريع';
+        
+        // Marquee Text
+        document.querySelectorAll('.cmn-textslide')[0].innerText = 'تطوير الواجهة الأمامية';
+        document.querySelectorAll('.cmn-textslide')[4].innerText = 'تطوير التطبيقات المتنقلة';
+        document.querySelectorAll('.cmn-textslide')[8].innerText = 'تكامل الخلفية';
+        document.querySelectorAll('.cmn-textslide')[12].innerText = 'تصميم واجهة المستخدم/تجربة المستخدم';
+        // Repeat for other marquee items similarly
+        
+        document.querySelector('.textsslide-hoverbox .textmore').innerText = 'دعنا نتواصل';
+        
+        // Footer / Contact
+        document.querySelector('#conts .talk-text').innerText = 'دعنا نتحدث معاً';
+        document.querySelector('.contact-left p').innerText = 'رائع! نحن متحمسون لسماع منك ولنبدأ شيئاً خاصاً معاً. اتصل بنا لأي استفسار.';
+        document.querySelectorAll('.contact-left a')[0].innerText = 'دبي، الإمارات العربية المتحدة';
+        document.querySelectorAll('.contact-left a')[1].innerText = '+971 563020773';
+        
+        // Contact Form Placeholders
+        document.querySelector('input[name="name"]').placeholder = 'الاسم';
+        document.querySelector('input[name="email"]').placeholder = 'البريد الإلكتروني';
+        document.querySelector('input[name="subject"]').placeholder = 'الموضوع';
+        document.querySelector('textarea[name="message"]').placeholder = 'الرسالة';
+        document.querySelector('.cmn-btn').innerText = 'إرسال الرسالة';
+        
+        document.querySelector('.copyright p').innerHTML = '&copy; 2025. جميع الحقوق محفوظة <a href="index.html" class="pwhite">إرشاد.</a>';
+        document.querySelector('.scroll-toptext').innerText = 'العودة إلى الرئيسية';
+        
+        // Preloader & Popups
+        document.querySelector('.preloader__Dixon span').innerText = 'جاري تهيئة المحفظة...';
+        document.querySelector('#chatSupportPopup span').innerText = '💬 دعم الدردشة متاح';
+        document.querySelector('.chat-header').innerText = 'دعم الدردشة';
+        document.querySelector('#messageInput').placeholder = 'الرسالة';
+        document.querySelector('.cv-title').innerText = 'يرجى اختيار اللغة التي تريد تنزيل السيرة الذاتية بها.';
+        document.querySelectorAll('.cv-options .cv-btn')[0].innerText = 'الإنجليزية';
+        document.querySelectorAll('.cv-options .cv-btn')[1].innerText = 'العربية';
+        document.querySelector('.cv-btn[onclick="openCVModal()"]').innerText = 'تنزيل السيرة الذاتية';
+        
+    } else {
+        location.reload(); // Revert to English by reloading
+    }
+}
+</script>
 
 
 
@@ -361,23 +456,28 @@ Based in Dubai
                </span>
             </span>
             
-            <ul class="right-social-com d-flex cmn-social gap-xxl-3 gap-2 justify-content-center">
-               <li>
-                  <a href="https://www.facebook.com/mhd.irshad.104?mibextid=ZbWKwL">
-                     <i class="bi bi-facebook"></i>
-                  </a>
-               </li>
-               <li>
-                  <a href="https://www.instagram.com/_ir_sha_d____/?igsh=cm4ydGR0NHU2OWQ1#">
-                     <i class="bi bi-instagram"></i>
-                  </a>
-               </li>
-               <li>
-                  <a href="https://www.linkedin.com/in/muhammed-irshad-vp-0a9648247">
-                     <i class="bi bi-linkedin"></i>
-                  </a>
-               </li>
-            </ul> 
+          <ul class="right-social-com d-flex cmn-social gap-xxl-3 gap-2 justify-content-center">
+    <li>
+        <a href="https://www.linkedin.com/in/muhammed-irshad-vp-0a9648247" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-linkedin"></i>
+        </a>
+    </li> 
+    <li>
+        <a href="https://github.com/irshad800" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-github"></i>
+        </a>
+    </li>
+    <li>
+        <a href="https://www.facebook.com/mhd.irshad.104?mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-facebook"></i>
+        </a>
+    </li>
+    <li>
+        <a href="https://www.instagram.com/_ir_sha_d____/?igsh=cm4ydGR0NHU2OWQ1#" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-instagram"></i>
+        </a>
+    </li>
+</ul>
             <div class="text-center">
               <!-- CV Download Button -->
 <div class="text-center">
@@ -390,10 +490,9 @@ Based in Dubai
      <span class="cv-close" onclick="closeCVModal()">&times;</span>
      <h5 class="cv-title">Please select the language in which you would like to download the CV.</h5>
      <div class="cv-options">
-       <a href="Irshad Software Developer ae.pdf" download class="cv-btn">English</a>
-       <a href="Irshad Software Developer ae.pdf" download class="cv-btn">Arabic</a>
-       <a href="Irshad Software Developer ae.pdf" download class="cv-btn">French</a>
-       <a href="Irshad Software Developer ae.pdf" download class="cv-btn">Hindi</a>
+       <a href="IRSHAD_FSD_CV.pdf" download class="cv-btn">English</a>
+       <a href="محمد إرشاد في بي_سيرة ذاتية_Arabic.pdf" download class="cv-btn">Arabic</a>
+      
      </div>
    </div>
  </div>
