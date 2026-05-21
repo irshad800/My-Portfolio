@@ -63,7 +63,7 @@ export default function GalleryPage() {
               onClick={() => setActiveImage(img)}
             >
               <div className="gallery-img-container">
-                <img src={img.src} alt={img.alt} />
+                <img src={img.src.startsWith('/') ? `${import.meta.env.BASE_URL}${img.src.slice(1)}` : img.src} alt={img.alt} />
                 <div className="gallery-overlay">
                   <span>{img.caption}</span>
                 </div>
@@ -78,7 +78,7 @@ export default function GalleryPage() {
         <div className="lightbox-modal" onClick={() => setActiveImage(null)}>
           <div className="lightbox-content" onClick={e => e.stopPropagation()}>
             <button className="lightbox-close" onClick={() => setActiveImage(null)}>&times;</button>
-            <img src={activeImage.src} alt={activeImage.alt} className="lightbox-img" />
+            <img src={activeImage.src.startsWith('/') ? `${import.meta.env.BASE_URL}${activeImage.src.slice(1)}` : activeImage.src} alt={activeImage.alt} className="lightbox-img" />
             <div className="lightbox-caption">{activeImage.caption}</div>
           </div>
         </div>

@@ -147,7 +147,7 @@ export default function Hero() {
               <div className="hud-bracket bottom-left" />
               <div className="hud-bracket bottom-right" />
 
-              <img src={isAvatar ? "/my-image/me-ai.png" : "/profile.jpeg"} alt={personalInfo.name} />
+              <img src={isAvatar ? `${import.meta.env.BASE_URL}my-image/me-ai.png` : `${import.meta.env.BASE_URL}profile.jpeg`} alt={personalInfo.name} />
             </div>
             
             <div className="hero-float-card card-1 glass">
