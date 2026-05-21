@@ -1,0 +1,73 @@
+English(fluent)      Arabic (Conversational)       Hindi(fluent)            Malayalam (Native)
+LANGUAGES
+Methodologies: Agile, Scrum
+State Management: Redux, Redux Toolkit, Provider, Bloc
+Architecture: MVC, MVVM, Clean Architecture
+AI & LLM: OpenAI & LLM APIs, Prompt Engineering, Chatbots/Agents, RAG, Vector DBs
+Payment Gateways: Stripe,  PayPal, CCAvenue, NOWPayments (Card, UPI, Net Banking, Crypto)
+Automation & Workflow Orchestration: n8n (Workflow Automation, API Orchestration, Webhooks, etc)
+CI/CD: GitHub Actions / Jenkins (basic)
+Containers: Docker, containerized applications
+Web Server / Reverse Proxy: Nginx
+Cloud: AWS (EC2, S3, IAM,  deployments)
+Databases: MongoDB, SQL, Firebase
+Mobile: Flutter (Cross-platform apps for Android & iOS)
+Frontend: React.js, Next.js, HTML, CSS, Tailwind CSS, Bootstrap, ES6+, TypeScript, JavaScript
+Backend: Node.js, Express.js, Nest JS , REST APIs
+TECHNICAL SKILLS
+see more projects
+Implemented SMTP email system for verifications and notifications.
+Integrated Stripe and NOWPayments for card and crypto payments.
+Developed the entire system, including user/admin dashboards, booking, and REST APIs with full CRUD.
+Individually built using MERN Stack a premium membership platform with 10 card packages, where users register first to book.
+Wish I Club Membership Website                                                                            MAR 2025 -  JUN  2025                  
+Secured with jsonwebtoken, bcrypt, Helmet, cors, axios, dotenv; admin manages investments, ROIs, users.
+Automated ROI calculation/payouts with Node-Cron, bank setup for ROI, and Nodemailer for email notifications.
+Integrated CCAvenue, NOWPayments for card, crypto, cash, bank transfers, and auto receipts with PDFKit.
+Added AI chatbot and automated emails using n8n & Google Gemini.
+Developed user/admin dashboards using React.js, Tailwind CSS, Material-UI, with CRUD APIs via Express.js and Mongoose.
+Built Prime Bond investment platform with Node.js, Express.js,React js MongoDB, user registration, KYC via Multer, and investment plans.
+Prime-Bond Investment Website                                                                                AUG 2025 - NOV  2025                  
+Optimized the platform to handle higher traffic and ensure smooth user interactions.
+Implemented role-based access control and improved admin management features for better monitoring and control.
+Integrated game provider APIs to enable seamless gaming services and external platform connectivity.
+Redesigned and optimized the UI for better user experience and usability.
+Enhanced and developed new features for an existing iGaming platform, improving scalability and overall system performance.
+Velplay365  iGaming Platform    Website                                                JAN  2026 -  PRESENT                                   
+PROJECTS
+        University Of Calicut     (2018 - 2021)                                                                                                 KERALA , INDIA
+Bsc Computer Science
+        APJ Abdul Kalam Technological University     (2022 - 2024)                                                               KERALA , INDIA
+Master Of Computer Application (MCA)
+EDUCATION
+Managed app state using Provider and BLoC for optimized performance and maintainable code.
+Designed responsive Material Design UI following MVC/MVVM architectures.
+Integrated Firebase and third-party REST APIs for authentication, real-time data, and external services.
+Developed scalable cross-platform apps using Flutter and Dart with Node.js, Express.js, and MongoDB backend services.
+JAN 2024 -  NOV 2024
+FULL STACK MOBILE APP DEVELOPER
+MAITEXA IT SOLUTION                                                                                         KERALA , INDIA
+Collaborated with cross-functional teams to deliver scalable solutions and maintain Agile workflows.
+Managed client meetings, deployment, ensuring secure features and satisfaction with Agile practices.
+Delivered live projects: prime-bond-investment, wishiclub.com, primewish.ae, wishbrands.lk, wishholdings.com, wishgroup.ae.
+Developed investment project with booking, admin panels, and payments (card, crypto, UPI) using Agile methodology.
+Completed 4 full-stack website projects using Node.js, Express.js, React.js, MongoDB, Next js, CSS, JavaScript, TypeScript, and Agile.
+NOV  2024 -  NOV 2025
+FULL-STACK DEVELOPER
+WISH GROUP                                                                                                              DUBAI , UAE
+Improved platform reliability by troubleshooting API integrations and optimizing application performance .
+Maintained and optimized existing features to ensure reliable backend services and responsive UI.
+Collaborated daily with developers and clients to deliver integrations and resolve technical issues efficiently.
+Integrated third-party provider APIs and implemented workflow automation using n8n.
+Developed and enhanced an iGaming platform using Node.js and React.js, improving system performance and scalability.
+JAN 2026 -  PRESENT
+FULL STACK ENGINEER
+VELNIX TECHNOLOGIES                                                                                              DUBAI, UAE
+WORK EXPERIENCE
+PORTFOLIO
+linkedIn  | portfolio |  github | Visa Status: Visit Visa | Immediate Joiner
++971 563020773|  irshadvp800@gmail.com  |  Dubai, United Arab Emirates           
+SOFTWARE DEVELOPER  | FULL STACK DEVELOPER
+Scan This QR Code
+MUHAMMED IRSHAD VP
+----------------Page (0) Break----------------
