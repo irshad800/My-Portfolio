@@ -21,6 +21,7 @@ export default function Navbar({ onDownloadCV }) {
   };
 
   const isActive = (href) => {
+    if (href === '/gallery') return isGalleryPage;
     if (isGalleryPage) return false;
     return activeSection === href.slice(1);
   };
@@ -31,15 +32,26 @@ export default function Navbar({ onDownloadCV }) {
         <div className="container">
           <Link to="/" className="nav-logo" onClick={close}>Irshad<span>.</span></Link>
           <div className="nav-links">
-            {navLinks.map(l => (
-              <a 
-                key={l.href} 
-                href={getHref(l.href)} 
-                className={isActive(l.href) ? 'active' : ''}
-              >
-                {l.label}
-              </a>
-            ))}
+            {navLinks.map(l => {
+              const isRoute = l.href.startsWith('/');
+              return isRoute ? (
+                <Link 
+                  key={l.href} 
+                  to={getHref(l.href)} 
+                  className={isActive(l.href) ? 'active' : ''}
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a 
+                  key={l.href} 
+                  href={getHref(l.href)} 
+                  className={isActive(l.href) ? 'active' : ''}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
             <a href="#!" className="nav-cta" onClick={e => { e.preventDefault(); onDownloadCV(); }}>
               Download CV
             </a>
@@ -51,9 +63,14 @@ export default function Navbar({ onDownloadCV }) {
       </nav>
       <div className={`mobile-overlay${menuOpen ? ' open' : ''}`} onClick={close} />
       <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
-        {navLinks.map(l => (
-          <a key={l.href} href={getHref(l.href)} onClick={close}>{l.label}</a>
-        ))}
+        {navLinks.map(l => {
+          const isRoute = l.href.startsWith('/');
+          return isRoute ? (
+            <Link key={l.href} to={getHref(l.href)} onClick={close}>{l.label}</Link>
+          ) : (
+            <a key={l.href} href={getHref(l.href)} onClick={close}>{l.label}</a>
+          );
+        })}
         <a href="#!" className="btn nav-cta" style={{ textAlign: 'center', marginTop: 12 }}
           onClick={e => { e.preventDefault(); close(); onDownloadCV(); }}>
           Download CV
