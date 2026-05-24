@@ -2597,4 +2597,20 @@ button {
     padding: 10px 16px;
     font-size: 0.82rem;
   }
+
+  /* Marquee mobile overrides */
+  .marquee-section {
+    padding: 12px 0;
+  }
+  .marquee-track {
+    gap: 20px;
+  }
+  .marquee-item {
+    font-size: 0.9rem;
+    gap: 20px;
+    letter-spacing: 1px;
+  }
+  .marquee-item span.separator {
+    font-size: 0.9rem;
+  }
 }

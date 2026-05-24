@@ -122,7 +122,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero-visual" style={{ animation: 'slide-up 1s ease .3s both' }}>
-          <div 
+          <div
             className="hero-image-wrap"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -132,7 +132,7 @@ export default function Hero() {
             <div className="tech-circle tech-circle-1" />
             <div className="tech-circle tech-circle-2" />
 
-            <div 
+            <div
               className="hero-image-frame glow-border"
               style={{
                 transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)`,
@@ -147,9 +147,9 @@ export default function Hero() {
               <div className="hud-bracket bottom-left" />
               <div className="hud-bracket bottom-right" />
 
-              <img src={isAvatar ? `${import.meta.env.BASE_URL}my-image/me-ai.png` : `${import.meta.env.BASE_URL}profile.jpeg`} alt={personalInfo.name} />
+              <img src={isAvatar ? `${import.meta.env.BASE_URL}my-image/me-ai.png` : `${import.meta.env.BASE_URL}irshad-image.png`} alt={personalInfo.name} />
             </div>
-            
+
             <div className="hero-float-card card-1 glass">
               <div className="card-label">Based in</div>
               <div className="card-value">🇦🇪 Dubai, UAE</div>
@@ -160,7 +160,7 @@ export default function Hero() {
             </div>
 
             {/* Premium Cyber Toggle Button */}
-            <button 
+            <button
               className="avatar-toggle-btn"
               onClick={() => setIsAvatar(!isAvatar)}
             >
