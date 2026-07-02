@@ -8,7 +8,7 @@ export default function About() {
     <section className="section about" id="about">
       <div className="container" ref={ref}>
         <div className={`about-image fade-in-left${vis ? ' visible' : ''}`}>
-          <img src="/my-image/me-ai.png" alt={personalInfo.name} />
+          <img src="my-image/me-ai.png" alt={personalInfo.name} />
           <div className="about-image-overlay">
             <div className="overlay-badge" />
             <div>

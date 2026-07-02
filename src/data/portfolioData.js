@@ -169,13 +169,13 @@ export const marqueeItems = [
 ];
 
 export const galleryImages = [
-  { id: 1, src: '/gallery-images/desktop/velplayhero-desk.png', alt: 'Velplay365 Hero Dashboard', caption: 'Velplay365 Hero Dashboard', type: 'desktop' },
-  { id: 9, src: '/gallery-images/mobile/velplay-moblie5.jpg', alt: 'Account Profile & Wallet Mobile UI', caption: 'Account Profile & Wallet Mobile UI', type: 'mobile' },
-  { id: 3, src: '/gallery-images/desktop/velplaycasino.png', alt: 'Velplay Live Casino Platform', caption: 'Velplay Live Casino Platform', type: 'desktop' },
-  { id: 4, src: '/gallery-images/mobile/velplay-moblie2.jpg', alt: 'Mobile Registration & KYC', caption: 'Mobile Registration & KYC', type: 'mobile' },
-  { id: 5, src: '/gallery-images/desktop/velplaygame-desk.png', alt: 'Interactive Casino Game Matrix', caption: 'Interactive Casino Game Matrix', type: 'desktop' },
-  { id: 6, src: '/gallery-images/mobile/velplay-moblie3.jpg', alt: 'Live Casino Mobile Stream', caption: 'Live Casino Mobile Stream', type: 'mobile' },
-  { id: 7, src: '/gallery-images/desktop/velplayrest.png', alt: 'API Integration & Webhooks Gateway', caption: 'API Integration & Webhooks Gateway', type: 'desktop' },
-  { id: 8, src: '/gallery-images/mobile/velplay-moblie4.jpg', alt: 'Mobile Bet Slip System', caption: 'Mobile Bet Slip System', type: 'mobile' },
-  { id: 2, src: '/gallery-images/mobile/velplay-mobile1.jpg', alt: 'iGaming Lobby Mobile UI', caption: 'iGaming Lobby Mobile UI', type: 'mobile' }
+  { id: 1, src: 'gallery-images/desktop/velplayhero-desk.png', alt: 'Velplay365 Hero Dashboard', caption: 'Velplay365 Hero Dashboard', type: 'desktop' },
+  { id: 9, src: 'gallery-images/mobile/velplay-moblie5.jpg', alt: 'Account Profile & Wallet Mobile UI', caption: 'Account Profile & Wallet Mobile UI', type: 'mobile' },
+  { id: 3, src: 'gallery-images/desktop/velplaycasino.png', alt: 'Velplay Live Casino Platform', caption: 'Velplay Live Casino Platform', type: 'desktop' },
+  { id: 4, src: 'gallery-images/mobile/velplay-moblie2.jpg', alt: 'Mobile Registration & KYC', caption: 'Mobile Registration & KYC', type: 'mobile' },
+  { id: 5, src: 'gallery-images/desktop/velplaygame-desk.png', alt: 'Interactive Casino Game Matrix', caption: 'Interactive Casino Game Matrix', type: 'desktop' },
+  { id: 6, src: 'gallery-images/mobile/velplay-moblie3.jpg', alt: 'Live Casino Mobile Stream', caption: 'Live Casino Mobile Stream', type: 'mobile' },
+  { id: 7, src: 'gallery-images/desktop/velplayrest.png', alt: 'API Integration & Webhooks Gateway', caption: 'API Integration & Webhooks Gateway', type: 'desktop' },
+  { id: 8, src: 'gallery-images/mobile/velplay-moblie4.jpg', alt: 'Mobile Bet Slip System', caption: 'Mobile Bet Slip System', type: 'mobile' },
+  { id: 2, src: 'gallery-images/mobile/velplay-mobile1.jpg', alt: 'iGaming Lobby Mobile UI', caption: 'iGaming Lobby Mobile UI', type: 'mobile' }
 ];

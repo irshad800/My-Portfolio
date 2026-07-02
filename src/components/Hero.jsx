@@ -138,16 +138,13 @@ export default function Hero() {
                 transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) scale3d(1.02, 1.02, 1.02)`,
               }}
             >
-              {/* Scanline element */}
-              <div className="hero-scan-line" />
-
               {/* HUD corner brackets */}
               <div className="hud-bracket top-left" />
               <div className="hud-bracket top-right" />
               <div className="hud-bracket bottom-left" />
               <div className="hud-bracket bottom-right" />
 
-              <img src={isAvatar ? "/my-image/me-ai.png" : "/profile.jpeg"} alt={personalInfo.name} />
+              <img src={isAvatar ? "my-image/me-ai.png" : "profile.jpeg"} alt={personalInfo.name} />
             </div>
             
             <div className="hero-float-card card-1 glass">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import Preloader from './components/Preloader';
 import ParticleCanvas from './components/ParticleCanvas';
 import CustomCursor from './components/CustomCursor';
@@ -55,6 +56,25 @@ export default function App() {
       <div className="ambient-glow glow-bottom-left" />
 
       <Navbar onDownloadCV={() => setShowCV(true)} />
+
+      <div className="floating-socials" aria-label="Quick contact links">
+        <a
+          href="https://wa.me/971563020773"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="social-link whatsapp"
+          aria-label="Contact via WhatsApp"
+        >
+          <FaWhatsapp />
+        </a>
+        <a
+          href="mailto:irshadvp800@gmail.com"
+          className="social-link gmail"
+          aria-label="Send an email"
+        >
+          <FaEnvelope />
+        </a>
+      </div>
 
       <Routes>
         <Route path="/" element={<HomePage onDownloadCV={() => setShowCV(true)} />} />
