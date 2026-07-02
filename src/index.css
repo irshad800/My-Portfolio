@@ -180,9 +180,17 @@ button {
   background: linear-gradient(135deg, #25d366, #128c7e);
 }
 
+.social-link.call {
+  background: linear-gradient(135deg, #2bb673, #159156);
+}
+
 .social-link.gmail {
   background: linear-gradient(135deg, #ea4335, #c5221f);
 }
+
+.social-link svg { width: 20px; height: 20px; }
+
+.social-link:hover { transform: translateY(-4px) scale(1.06); box-shadow: 0 14px 36px rgba(0,0,0,0.35); }
 
 @media (max-width: 768px) {
   .floating-socials {

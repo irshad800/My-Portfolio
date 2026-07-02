@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { FaWhatsapp, FaEnvelope } from 'react-icons/fa';
+import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa';
 import Preloader from './components/Preloader';
 import ParticleCanvas from './components/ParticleCanvas';
 import CustomCursor from './components/CustomCursor';
@@ -58,6 +58,13 @@ export default function App() {
       <Navbar onDownloadCV={() => setShowCV(true)} />
 
       <div className="floating-socials" aria-label="Quick contact links">
+        <a
+          href="tel:+971563020773"
+          className="social-link call"
+          aria-label="Call phone number"
+        >
+          <FaPhone />
+        </a>
         <a
           href="https://wa.me/971563020773"
           target="_blank"
