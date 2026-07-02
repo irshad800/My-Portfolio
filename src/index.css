@@ -53,6 +53,14 @@ html {
   scroll-padding-top: 75px;
 }
 
+/* Prevent unintended horizontal scrolling on mobile devices */
+html, body, #root {
+  overflow-x: hidden;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -1216,6 +1224,12 @@ button {
     justify-content: center;
     align-items: center;
   }
+
+  /* Ensure floating cards and social rail don't create horizontal overflow */
+  .hero-float-card.card-1 { right: 6%; }
+  .hero-float-card.card-2 { left: 6%; }
+  .hero-socials { right: 8px; top: auto; bottom: 12px; transform: none; flex-direction: row; gap: 8px; }
+  .tech-circle, .hero-orbit { display: none; }
 }
 
 /* ===== ABOUT SECTION ===== */
