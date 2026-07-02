@@ -160,6 +160,7 @@ export const navLinks = [
   { label: 'Skills', href: '#skills' },
   { label: 'Expertise', href: '#expertise' },
   { label: 'Projects', href: '#projects' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'Contact', href: '#contact' },
 ];
 
