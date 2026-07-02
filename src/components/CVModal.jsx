@@ -4,13 +4,13 @@ export default function CVModal({ onClose }) {
       <div className="modal-content glass" onClick={e => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>×</button>
         <h3>Download CV</h3>
-        <p>Select the language you'd like to download the CV in.</p>
+        <p>Select your preferred language.</p>
         <div className="modal-buttons">
-          <a href={`${import.meta.env.BASE_URL}IRSHAD_CV_EN.pdf`} download className="btn btn-primary" style={{ justifyContent: 'center' }}>
-            🇬🇧 English
+          <a href={`${import.meta.env.BASE_URL}cv/IRSHAD-SOFTWARE_ENGINEER-CV.ae.pdf`} download className="btn btn-primary" style={{ justifyContent: 'center' }}>
+            English CV
           </a>
-          <a href={`${import.meta.env.BASE_URL}IRSHAD_CV_AR.pdf`} download className="btn btn-outline" style={{ justifyContent: 'center' }}>
-            🇦🇪 Arabic
+          <a href={`${import.meta.env.BASE_URL}cv/IRSHAD_CV_Arabic.ae.pdf`} download className="btn btn-outline" style={{ justifyContent: 'center' }}>
+            Arabic CV
           </a>
         </div>
       </div>
