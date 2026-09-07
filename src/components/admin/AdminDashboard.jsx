@@ -275,6 +275,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const [selectedCountry, setSelectedCountry] = useState('ALL');
   const [selectedDevice, setSelectedDevice] = useState('ALL');
   const [timeRange, setTimeRange] = useState('ALL');
+  const [visibleLogCount, setVisibleLogCount] = useState(20);
 
   const filteredVisitors = (analyticsData.recentVisitors || []).filter((v) => {
     // 1. Search text filter (IP, City, Region, Path, Country)
@@ -311,6 +312,8 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
     return true;
   });
+
+  const displayedVisitors = filteredVisitors.slice(0, visibleLogCount);
 
   return (
     <div className="admin-dashboard-layout">
@@ -527,7 +530,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
                 <div className="admin-panel-card glass" style={{ marginTop: '28px' }}>
                   <div className="card-header" style={{ flexWrap: 'wrap', gap: '10px' }}>
                     <h2>🕒 Visitor Activity Log ({filteredVisitors.length})</h2>
-                    <span className="badge">Showing {filteredVisitors.length} of {analyticsData.recentVisitors.length} Logs</span>
+                    <span className="badge">Showing {displayedVisitors.length} of {filteredVisitors.length} Filtered Logs (Total DB Visits: {analyticsData.stats.totalVisits})</span>
                   </div>
 
                   {/* Filter & Search Bar */}
@@ -589,10 +592,10 @@ export default function AdminDashboard({ token, username, onLogout }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredVisitors.length === 0 ? (
+                        {displayedVisitors.length === 0 ? (
                           <tr><td colSpan="6" style={{ textAlign: 'center', padding: '24px' }}>No visitor records match the selected filters.</td></tr>
                         ) : (
-                          filteredVisitors.map((v, i) => (
+                          displayedVisitors.map((v, i) => (
                             <tr key={i}>
                               <td>
                                 <span className="flag-emoji">{getCountryFlag(v.countryCode)}</span> {v.country}
@@ -610,6 +613,37 @@ export default function AdminDashboard({ token, username, onLogout }) {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Load More & See All Controls */}
+                  {filteredVisitors.length > 20 && (
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '16px', flexWrap: 'wrap' }}>
+                      {visibleLogCount < filteredVisitors.length && (
+                        <>
+                          <button 
+                            className="admin-notif-btn"
+                            onClick={() => setVisibleLogCount(prev => prev + 20)}
+                          >
+                            🔽 Load 20 More Logs
+                          </button>
+                          <button 
+                            className="admin-notif-btn" 
+                            style={{ background: 'rgba(6, 182, 212, 0.15)', borderColor: 'rgba(6, 182, 212, 0.3)', color: 'var(--accent)' }}
+                            onClick={() => setVisibleLogCount(filteredVisitors.length)}
+                          >
+                            👁️ See All Logs ({filteredVisitors.length})
+                          </button>
+                        </>
+                      )}
+                      {visibleLogCount > 20 && (
+                        <button 
+                          className="admin-filter-reset-btn" 
+                          onClick={() => setVisibleLogCount(20)}
+                        >
+                          ▲ Show Top 20 Only
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
