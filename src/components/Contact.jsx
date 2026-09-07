@@ -13,7 +13,8 @@ export default function Contact() {
     const fd = new FormData(e.target);
     const data = Object.fromEntries(fd.entries());
     try {
-      const res = await fetch('https://portfoliobackend-39ou.onrender.com/api/contact', {
+      const backendUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://portfoliobackend-39ou.onrender.com';
+      const res = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

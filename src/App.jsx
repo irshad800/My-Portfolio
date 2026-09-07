@@ -16,7 +16,7 @@ import GallerySection from './components/GallerySection';
 import Contact from './components/Contact';
 import GalleryPage from './components/GalleryPage';
 
-import CVModal from './components/CVModal';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function HomePage({ onDownloadCV }) {
   return (
@@ -39,10 +39,27 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 992); // Matches hover/custom cursor breakpoint
+    const check = () => setIsMobile(window.innerWidth < 992);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Automatic silent visitor geolocation logging
+  useEffect(() => {
+    const logVisit = async () => {
+      try {
+        const backendUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://portfoliobackend-39ou.onrender.com';
+        await fetch(`${backendUrl}/api/visit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: window.location.pathname })
+        });
+      } catch (err) {
+        // Silent failure if offline
+      }
+    };
+    logVisit();
   }, []);
 
   return (
@@ -86,6 +103,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage onDownloadCV={() => setShowCV(true)} />} />
         <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/admin" element={<ProtectedRoute />} />
       </Routes>
 
       {showCV && <CVModal onClose={() => setShowCV(false)} />}
