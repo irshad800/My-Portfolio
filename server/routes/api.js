@@ -30,14 +30,22 @@ async function sendBackgroundPushNotification(payload) {
     const subscriptions = await PushSubscription.find();
     const notificationPayload = JSON.stringify(payload);
 
+    const pushOptions = {
+      TTL: 86400, // Keep queued up to 24 hours if device is momentarily offline
+      urgency: 'high',
+      topic: 'portfolio-alert'
+    };
+
     const pushPromises = subscriptions.map(sub => 
       webpush.sendNotification(
         {
           endpoint: sub.endpoint,
           keys: sub.keys
         },
-        notificationPayload
+        notificationPayload,
+        pushOptions
       ).catch(async err => {
+        console.error('Push delivery error for endpoint:', sub.endpoint, err.message);
         if (err.statusCode === 404 || err.statusCode === 410) {
           await PushSubscription.deleteOne({ _id: sub._id });
         }

@@ -81,12 +81,16 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const swRegRef = useRef(null);
 
   useEffect(() => {
-    // Register Service Worker for Mobile & OS Native System Notifications
+    // Register Service Worker with correct base URL for GitHub Pages / production
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then((reg) => {
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const swUrl = `${baseUrl}sw.js`.replace(/\/\//g, '/');
+
+      navigator.serviceWorker.register(swUrl).then((reg) => {
         swRegRef.current = reg;
+        console.log('Service Worker registered successfully at:', swUrl);
       }).catch((err) => {
-        console.log('SW registration error:', err);
+        console.log('SW registration error at', swUrl, err);
       });
     }
   }, []);
