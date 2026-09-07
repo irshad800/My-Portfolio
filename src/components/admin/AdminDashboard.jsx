@@ -276,6 +276,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const [selectedDevice, setSelectedDevice] = useState('ALL');
   const [timeRange, setTimeRange] = useState('ALL');
   const [visibleLogCount, setVisibleLogCount] = useState(20);
+  const [selectedIpModal, setSelectedIpModal] = useState(null);
 
   const filteredVisitors = (analyticsData.recentVisitors || []).filter((v) => {
     // 1. Search text filter (IP, City, Region, Path, Country)
@@ -317,6 +318,111 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   return (
     <div className="admin-dashboard-layout">
+      {/* IP Detail Investigation Modal */}
+      <AnimatePresence>
+        {selectedIpModal && (
+          <motion.div 
+            className="admin-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedIpModal(null)}
+          >
+            <motion.div 
+              className="admin-modal-card glass"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {(() => {
+                const ipLogs = (analyticsData.recentVisitors || []).filter(v => v.ip === selectedIpModal);
+                const firstLog = ipLogs[0] || {};
+                return (
+                  <div>
+                    <div className="modal-header">
+                      <div>
+                        <h2>🌐 IP Investigation: <code>{selectedIpModal}</code></h2>
+                        <p className="sender-location">
+                          Location: <span className="flag-emoji">{getCountryFlag(firstLog.countryCode)}</span> {firstLog.country} ({firstLog.city}, {firstLog.region})
+                        </p>
+                      </div>
+                      <button className="modal-close-btn" onClick={() => setSelectedIpModal(null)}>✕</button>
+                    </div>
+
+                    <div className="ip-modal-stats">
+                      <div className="ip-stat-badge">
+                        <span>Total Pageviews</span>
+                        <strong>{ipLogs.length} Visits</strong>
+                      </div>
+                      <div className="ip-stat-badge">
+                        <span>Primary Device</span>
+                        <strong>{getDeviceIcon(firstLog.deviceType)}</strong>
+                      </div>
+                      <div className="ip-stat-badge">
+                        <span>Last Activity</span>
+                        <strong>{firstLog.timestamp ? new Date(firstLog.timestamp).toLocaleTimeString() : 'N/A'}</strong>
+                      </div>
+                    </div>
+
+                    {firstLog.userAgent && (
+                      <div className="user-agent-box">
+                        <strong>User Agent:</strong> <code>{firstLog.userAgent}</code>
+                      </div>
+                    )}
+
+                    <div className="ip-history-section">
+                      <h3 style={{ fontSize: '0.88rem', margin: '14px 0 8px 0', color: 'var(--white)' }}>
+                        📜 Page Activity History for <code>{selectedIpModal}</code>
+                      </h3>
+                      <div className="table-responsive" style={{ maxHeight: '200px' }}>
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Page Path</th>
+                              <th>Device</th>
+                              <th>Timestamp</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {ipLogs.map((log, idx) => (
+                              <tr key={idx}>
+                                <td><code>{log.path}</code></td>
+                                <td><span className="device-badge">{getDeviceIcon(log.deviceType)}</span></td>
+                                <td>{new Date(log.timestamp).toLocaleString()}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div className="modal-actions" style={{ display: 'flex', gap: '10px', marginTop: '18px', justifyContent: 'flex-end' }}>
+                      <button 
+                        className="btn btn-primary"
+                        style={{ padding: '6px 14px', fontSize: '0.78rem' }}
+                        onClick={() => {
+                          setIpSearch(selectedIpModal);
+                          setSelectedIpModal(null);
+                        }}
+                      >
+                        🔍 Filter Main Log Table by this IP
+                      </button>
+                      <button 
+                        className="btn-action"
+                        onClick={() => setSelectedIpModal(null)}
+                      >
+                        Cancel / Close
+                      </button>
+                    </div>
+                  </div>
+                );
+              })()}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Floating Toast Notification Banner */}
       <AnimatePresence>
         {toastNotification && (
@@ -586,7 +692,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
                           <th>Flag & Country</th>
                           <th>Device Type</th>
                           <th>City / Region</th>
-                          <th>IP Address</th>
+                          <th>IP Address (Click for Details)</th>
                           <th>Page Path</th>
                           <th>Timestamp</th>
                         </tr>
@@ -604,7 +710,15 @@ export default function AdminDashboard({ token, username, onLogout }) {
                                 <span className="device-badge">{getDeviceIcon(v.deviceType)}</span>
                               </td>
                               <td>{v.city}, {v.region}</td>
-                              <td><code>{v.ip}</code></td>
+                              <td>
+                                <code 
+                                  className="clickable-ip"
+                                  onClick={() => setSelectedIpModal(v.ip)}
+                                  title="Click to view IP details & page history"
+                                >
+                                  {v.ip} 🔍
+                                </code>
+                              </td>
                               <td><code>{v.path}</code></td>
                               <td>{new Date(v.timestamp).toLocaleString()}</td>
                             </tr>
