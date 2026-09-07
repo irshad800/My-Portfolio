@@ -130,23 +130,38 @@ export default function AdminDashboard({ token, username, onLogout }) {
     }
   };
 
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   const totalVisits = analyticsData.stats.totalVisits || 1;
-  const desktopCount = analyticsData.devices?.desktop || 0;
-  const mobileCount = analyticsData.devices?.mobile || 0;
-  const tabletCount = analyticsData.devices?.tablet || 0;
+  const desktopCount = analyticsData.devices?.desktop ?? analyticsData.devices?.Desktop ?? 0;
+  const mobileCount = analyticsData.devices?.mobile ?? analyticsData.devices?.Mobile ?? 0;
+  const tabletCount = analyticsData.devices?.tablet ?? analyticsData.devices?.Tablet ?? 0;
 
   const getDeviceIcon = (deviceType) => {
     if (deviceType === 'Mobile') return '📱 Mobile';
     if (deviceType === 'Tablet') return '📟 Tablet';
-    if (deviceType === 'Desktop') return '💻 Desktop (PC)';
-    return '🌐 Unknown';
+    if (deviceType === 'Desktop') return '💻 Desktop';
+    return '💻 Desktop';
   };
 
   return (
     <div className="admin-dashboard-layout">
-      {/* Sidebar Navigation */}
-      <aside className="admin-sidebar">
+      {/* Mobile Top Header */}
+      <div className="admin-mobile-topbar">
         <div className="admin-sidebar-brand">
+          <span className="brand-dot">⚡</span> Irshad Admin
+        </div>
+        <button 
+          className="admin-mobile-toggle"
+          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+        >
+          {mobileSidebarOpen ? '✖ Close Menu' : '☰ Admin Menu'}
+        </button>
+      </div>
+
+      {/* Sidebar Navigation */}
+      <aside className={`admin-sidebar ${mobileSidebarOpen ? 'mobile-open' : ''}`}>
+        <div className="admin-sidebar-brand desktop-only">
           <span className="brand-dot">⚡</span> Irshad Admin
         </div>
         <div className="admin-user-badge">
@@ -156,21 +171,21 @@ export default function AdminDashboard({ token, username, onLogout }) {
         <nav className="admin-nav-links">
           <button 
             className={`admin-nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
+            onClick={() => { setActiveTab('analytics'); setMobileSidebarOpen(false); }}
           >
-            📊 Country & Device Analytics
+            📊 Analytics & Devices
           </button>
           <button 
             className={`admin-nav-item ${activeTab === 'inbox' ? 'active' : ''}`}
-            onClick={() => setActiveTab('inbox')}
+            onClick={() => { setActiveTab('inbox'); setMobileSidebarOpen(false); }}
           >
-            📬 Contact Inbox ({analyticsData.stats.unreadMessages > 0 ? `🔴 ${analyticsData.stats.unreadMessages}` : messages.length})
+            📬 Inbox ({analyticsData.stats.unreadMessages > 0 ? `🔴 ${analyticsData.stats.unreadMessages}` : messages.length})
           </button>
           <button 
             className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-            onClick={() => setActiveTab('settings')}
+            onClick={() => { setActiveTab('settings'); setMobileSidebarOpen(false); }}
           >
-            ⚙️ Credentials & Password
+            ⚙️ Credentials
           </button>
         </nav>
 
@@ -183,11 +198,11 @@ export default function AdminDashboard({ token, username, onLogout }) {
       <main className="admin-main-content">
         <header className="admin-header">
           <div>
-            <h1>Portfolio Executive Dashboard</h1>
-            <p>Real-time MongoDB Geolocation, Device Analytics & Contact Inbox</p>
+            <h1>Executive Dashboard</h1>
+            <p>Geolocation, Device Analytics & Messages</p>
           </div>
-          <button className="btn btn-outline" onClick={() => { fetchAnalytics(); fetchMessages(); }}>
-            🔄 Refresh Data
+          <button className="btn btn-outline admin-refresh-btn" onClick={() => { fetchAnalytics(); fetchMessages(); }}>
+            🔄 Refresh
           </button>
         </header>
 
