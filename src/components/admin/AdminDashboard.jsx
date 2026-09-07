@@ -942,6 +942,40 @@ export default function AdminDashboard({ token, username, onLogout }) {
                     </button>
                   </form>
                 </div>
+
+                <div className="admin-panel-card glass" style={{ maxWidth: '600px', marginTop: '24px', borderColor: 'rgba(244, 63, 94, 0.3)' }}>
+                  <div className="card-header">
+                    <h2 style={{ color: '#f43f5e' }}>🗑️ Reset & Clear Database</h2>
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '16px' }}>
+                    Permanently delete all stored test visitor logs and test contact messages from MongoDB Atlas.
+                  </p>
+                  <button 
+                    className="btn-action delete"
+                    onClick={async () => {
+                      if (!window.confirm('⚠️ ARE YOU SURE? This will permanently delete ALL visitor logs and contact messages from MongoDB.')) return;
+                      try {
+                        const res = await fetch(`${API_BASE_URL}/api/admin/clear-all-data`, {
+                          method: 'DELETE',
+                          headers: { Authorization: `Bearer ${token}` }
+                        });
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                          alert('✅ ' + data.message);
+                          pollAnalytics();
+                          fetchMessages();
+                        } else {
+                          alert('❌ Failed to clear database data');
+                        }
+                      } catch (err) {
+                        alert('❌ Error clearing database');
+                      }
+                    }}
+                    style={{ padding: '8px 16px', fontSize: '0.82rem' }}
+                  >
+                    🗑️ Delete All Database Test Data
+                  </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
