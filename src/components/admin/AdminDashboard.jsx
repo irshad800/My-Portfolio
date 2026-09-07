@@ -270,6 +270,48 @@ export default function AdminDashboard({ token, username, onLogout }) {
     return '💻 Desktop';
   };
 
+  // Filter & Search State
+  const [ipSearch, setIpSearch] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('ALL');
+  const [selectedDevice, setSelectedDevice] = useState('ALL');
+  const [timeRange, setTimeRange] = useState('ALL');
+
+  const filteredVisitors = (analyticsData.recentVisitors || []).filter((v) => {
+    // 1. Search text filter (IP, City, Region, Path, Country)
+    if (ipSearch.trim() !== '') {
+      const q = ipSearch.toLowerCase().trim();
+      const matchIp = v.ip && v.ip.toLowerCase().includes(q);
+      const matchCity = v.city && v.city.toLowerCase().includes(q);
+      const matchRegion = v.region && v.region.toLowerCase().includes(q);
+      const matchPath = v.path && v.path.toLowerCase().includes(q);
+      const matchCountry = v.country && v.country.toLowerCase().includes(q);
+      if (!matchIp && !matchCity && !matchRegion && !matchPath && !matchCountry) return false;
+    }
+
+    // 2. Country filter
+    if (selectedCountry !== 'ALL') {
+      if (v.country !== selectedCountry) return false;
+    }
+
+    // 3. Device filter
+    if (selectedDevice !== 'ALL') {
+      const dev = (v.deviceType || 'Desktop').toLowerCase();
+      const sel = selectedDevice.toLowerCase();
+      if (!dev.includes(sel) && !sel.includes(dev)) return false;
+    }
+
+    // 4. Time Range filter
+    if (timeRange !== 'ALL') {
+      const vTime = new Date(v.timestamp).getTime();
+      const now = Date.now();
+      if (timeRange === '24H' && now - vTime > 24 * 60 * 60 * 1000) return false;
+      if (timeRange === '7D' && now - vTime > 7 * 24 * 60 * 60 * 1000) return false;
+      if (timeRange === '30D' && now - vTime > 30 * 24 * 60 * 60 * 1000) return false;
+    }
+
+    return true;
+  });
+
   return (
     <div className="admin-dashboard-layout">
       {/* Floating Toast Notification Banner */}
@@ -481,11 +523,59 @@ export default function AdminDashboard({ token, username, onLogout }) {
                   </div>
                 </div>
 
-                {/* Recent Visitors Activity Log */}
+                {/* Recent Visitors Activity Log with Filters */}
                 <div className="admin-panel-card glass" style={{ marginTop: '28px' }}>
-                  <div className="card-header">
-                    <h2>🕒 Recent Visitors Log (Last 20)</h2>
+                  <div className="card-header" style={{ flexWrap: 'wrap', gap: '10px' }}>
+                    <h2>🕒 Visitor Activity Log ({filteredVisitors.length})</h2>
+                    <span className="badge">Showing {filteredVisitors.length} of {analyticsData.recentVisitors.length} Logs</span>
                   </div>
+
+                  {/* Filter & Search Bar */}
+                  <div className="admin-filter-bar">
+                    <div className="filter-item search-box">
+                      <input 
+                        type="text" 
+                        placeholder="🔍 Search IP, City, or Path..." 
+                        value={ipSearch}
+                        onChange={(e) => setIpSearch(e.target.value)}
+                        className="admin-filter-input"
+                      />
+                    </div>
+
+                    <div className="filter-item">
+                      <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="admin-filter-select">
+                        <option value="ALL">🌍 All Countries</option>
+                        {analyticsData.countries.map((c, i) => (
+                          <option key={i} value={c.country}>{c.country}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="filter-item">
+                      <select value={selectedDevice} onChange={(e) => setSelectedDevice(e.target.value)} className="admin-filter-select">
+                        <option value="ALL">📱 All Devices</option>
+                        <option value="Desktop">💻 Desktop / PC</option>
+                        <option value="Mobile">📱 Mobile</option>
+                        <option value="Tablet">📟 Tablet</option>
+                      </select>
+                    </div>
+
+                    <div className="filter-item">
+                      <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)} className="admin-filter-select">
+                        <option value="ALL">🕒 All Time</option>
+                        <option value="24H">⚡ Last 24 Hours</option>
+                        <option value="7D">📅 Last 7 Days</option>
+                        <option value="30D">🗓️ Last 30 Days</option>
+                      </select>
+                    </div>
+
+                    {(ipSearch || selectedCountry !== 'ALL' || selectedDevice !== 'ALL' || timeRange !== 'ALL') && (
+                      <button className="admin-filter-reset-btn" onClick={() => { setIpSearch(''); setSelectedCountry('ALL'); setSelectedDevice('ALL'); setTimeRange('ALL'); }}>
+                        ✕ Reset
+                      </button>
+                    )}
+                  </div>
+
                   <div className="table-responsive">
                     <table className="admin-table">
                       <thead>
@@ -499,20 +589,24 @@ export default function AdminDashboard({ token, username, onLogout }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {analyticsData.recentVisitors.map((v, i) => (
-                          <tr key={i}>
-                            <td>
-                              <span className="flag-emoji">{getCountryFlag(v.countryCode)}</span> {v.country}
-                            </td>
-                            <td>
-                              <span className="device-badge">{getDeviceIcon(v.deviceType)}</span>
-                            </td>
-                            <td>{v.city}, {v.region}</td>
-                            <td><code>{v.ip}</code></td>
-                            <td><code>{v.path}</code></td>
-                            <td>{new Date(v.timestamp).toLocaleString()}</td>
-                          </tr>
-                        ))}
+                        {filteredVisitors.length === 0 ? (
+                          <tr><td colSpan="6" style={{ textAlign: 'center', padding: '24px' }}>No visitor records match the selected filters.</td></tr>
+                        ) : (
+                          filteredVisitors.map((v, i) => (
+                            <tr key={i}>
+                              <td>
+                                <span className="flag-emoji">{getCountryFlag(v.countryCode)}</span> {v.country}
+                              </td>
+                              <td>
+                                <span className="device-badge">{getDeviceIcon(v.deviceType)}</span>
+                              </td>
+                              <td>{v.city}, {v.region}</td>
+                              <td><code>{v.ip}</code></td>
+                              <td><code>{v.path}</code></td>
+                              <td>{new Date(v.timestamp).toLocaleString()}</td>
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>

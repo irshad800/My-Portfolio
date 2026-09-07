@@ -4167,6 +4167,70 @@ button {
   color: #34d399;
 }
 
+/* Admin Filter & Search Bar */
+.admin-filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+}
+
+.filter-item.search-box {
+  flex: 1 1 200px;
+}
+
+.admin-filter-input {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--white);
+  outline: none;
+}
+
+.admin-filter-input:focus {
+  border-color: var(--accent);
+}
+
+.admin-filter-select {
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer !important;
+}
+
+.admin-filter-reset-btn {
+  padding: 6px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border-radius: 6px;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #f43f5e;
+  cursor: pointer !important;
+  transition: all 0.2s ease;
+}
+
+.admin-filter-reset-btn:hover {
+  background: rgba(244, 63, 94, 0.25);
+}
+
 /* Dashboard Layout & Independent Sidebar / Content Scrolling */
 .admin-dashboard-layout {
   display: flex;
