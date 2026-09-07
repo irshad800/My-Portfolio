@@ -11,27 +11,38 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('push', (event) => {
   let data = { title: '⚡ Portfolio Alert', body: 'New visitor or message on your portfolio!' };
   try {
-    if (event.data) data = event.data.json();
+    if (event.data) {
+      data = event.data.json();
+    }
   } catch (e) {
-    if (event.data) data.body = event.data.text();
+    if (event.data) {
+      data.body = event.data.text();
+    }
   }
 
+  // Construct absolute URL for icon so image load never returns 404
+  const baseUrl = self.registration.scope || '/';
+  const iconUrl = new URL('favicon.jpeg', baseUrl).href;
+
   const options = {
-    body: data.body,
-    icon: '/favicon.svg',
-    badge: '/favicon.svg',
-    vibrate: [200, 100, 200, 100, 200],
-    tag: 'portfolio-system-notification',
+    body: data.body || 'New activity recorded on your portfolio',
+    icon: data.icon || iconUrl,
+    badge: data.badge || iconUrl,
+    vibrate: [300, 100, 300, 100, 300],
+    tag: 'portfolio-alert-' + Date.now(),
     renotify: true,
-    data: { url: self.registration.scope }
+    requireInteraction: true,
+    data: { url: baseUrl + '#/admin' }
   };
 
-  event.waitUntil(self.registration.showNotification(data.title, options));
+  event.waitUntil(self.registration.showNotification(data.title || '⚡ Portfolio Alert', options));
 });
 
 // Handle tap on system notification in mobile OS status bar / desktop tray
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || './#/admin';
+
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
@@ -40,7 +51,7 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow('./#/admin');
+        return clients.openWindow(targetUrl);
       }
     })
   );

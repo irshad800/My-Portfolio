@@ -16,7 +16,7 @@ const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 't8MGLlX-WzuBcuWfoctw
 
 try {
   webpush.setVapidDetails(
-    'mailto:admin@irshadportfolio.com',
+    'mailto:irshadvp800@gmail.com',
     VAPID_PUBLIC_KEY,
     VAPID_PRIVATE_KEY
   );
@@ -28,12 +28,17 @@ try {
 async function sendBackgroundPushNotification(payload) {
   try {
     const subscriptions = await PushSubscription.find();
+    if (!subscriptions || subscriptions.length === 0) {
+      console.log('[PUSH] No active push subscriptions in database.');
+      return;
+    }
+
+    console.log(`[PUSH] Sending Web Push alert to ${subscriptions.length} active subscriber(s)...`);
     const notificationPayload = JSON.stringify(payload);
 
     const pushOptions = {
       TTL: 86400, // Keep queued up to 24 hours if device is momentarily offline
-      urgency: 'high',
-      topic: 'portfolio-alert'
+      urgency: 'high'
     };
 
     const pushPromises = subscriptions.map(sub => 
@@ -44,9 +49,12 @@ async function sendBackgroundPushNotification(payload) {
         },
         notificationPayload,
         pushOptions
-      ).catch(async err => {
-        console.error('Push delivery error for endpoint:', sub.endpoint, err.message);
+      ).then(res => {
+        console.log('[PUSH SUCCESS] Delivered to:', sub.endpoint.substring(0, 35) + '...', 'Status:', res.statusCode);
+      }).catch(async err => {
+        console.error('[PUSH ERROR] Delivery error for endpoint:', sub.endpoint.substring(0, 35) + '...', 'Status:', err.statusCode || err.message);
         if (err.statusCode === 404 || err.statusCode === 410) {
+          console.log('[PUSH CLEANUP] Deleting expired subscription:', sub.endpoint.substring(0, 35) + '...');
           await PushSubscription.deleteOne({ _id: sub._id });
         }
       })
@@ -111,11 +119,23 @@ router.get('/push/vapid-public-key', (req, res) => {
 });
 
 // POST Save Web Push Subscription
-router.post('/push/subscribe', authMiddleware, async (req, res) => {
+router.post('/push/subscribe', async (req, res) => {
   try {
     const subscription = req.body;
     if (!subscription || !subscription.endpoint) {
       return res.status(400).json({ success: false, message: 'Invalid subscription object' });
+    }
+
+    let adminUsername = 'admin';
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded && decoded.username) adminUsername = decoded.username;
+      } catch (e) {
+        // Fallback gracefully
+      }
     }
 
     await PushSubscription.findOneAndUpdate(
@@ -123,11 +143,12 @@ router.post('/push/subscribe', authMiddleware, async (req, res) => {
       {
         endpoint: subscription.endpoint,
         keys: subscription.keys,
-        adminUsername: req.admin?.username || 'admin'
+        adminUsername
       },
       { upsert: true, new: true }
     );
 
+    console.log('[PUSH SUBSCRIBED] Web Push subscription saved in DB for endpoint:', subscription.endpoint.substring(0, 35) + '...');
     res.json({ success: true, message: 'Background Web Push subscription registered!' });
   } catch (err) {
     console.error('Error saving push subscription:', err);

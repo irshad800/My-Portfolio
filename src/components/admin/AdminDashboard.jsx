@@ -80,6 +80,38 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   const swRegRef = useRef(null);
 
+  const syncWebPushSubscription = async (reg) => {
+    if (!reg || typeof window === 'undefined' || Notification.permission !== 'granted') return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/push/vapid-public-key`);
+      const data = await res.json();
+      if (data.success && data.publicKey) {
+        const applicationServerKey = urlBase64ToUint8Array(data.publicKey);
+        
+        let subscription = await reg.pushManager.getSubscription();
+        if (!subscription) {
+          subscription = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey
+          });
+        }
+
+        // Send / update subscription in MongoDB database
+        await fetch(`${API_BASE_URL}/api/push/subscribe`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(subscription)
+        });
+        console.log('✅ Background Web Push subscription synced with MongoDB!');
+      }
+    } catch (e) {
+      console.error('Web Push subscription sync error:', e);
+    }
+  };
+
   useEffect(() => {
     // Register Service Worker with correct base URL for GitHub Pages / production
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
@@ -89,11 +121,21 @@ export default function AdminDashboard({ token, username, onLogout }) {
       navigator.serviceWorker.register(swUrl).then((reg) => {
         swRegRef.current = reg;
         console.log('Service Worker registered successfully at:', swUrl);
+        if (Notification.permission === 'granted') {
+          syncWebPushSubscription(reg);
+        }
       }).catch((err) => {
         console.log('SW registration error at', swUrl, err);
       });
+
+      navigator.serviceWorker.ready.then((reg) => {
+        swRegRef.current = reg;
+        if (Notification.permission === 'granted') {
+          syncWebPushSubscription(reg);
+        }
+      });
     }
-  }, []);
+  }, [token]);
 
   const showToast = (title, body) => {
     setToastNotification({ title, body });
@@ -108,33 +150,9 @@ export default function AdminDashboard({ token, username, onLogout }) {
       setNotificationPermission(perm);
       if (perm === 'granted') {
         notifyAdmin('🔔 System Notifications Activated!', 'Your device will now show OS native system notifications even when Chrome is closed.');
-        
-        // Register Web Push Subscription for background alerts even when Chrome is closed
-        if ('serviceWorker' in navigator && swRegRef.current) {
-          try {
-            const res = await fetch(`${API_BASE_URL}/api/push/vapid-public-key`);
-            const data = await res.json();
-            if (data.success && data.publicKey) {
-              const applicationServerKey = urlBase64ToUint8Array(data.publicKey);
-              const subscription = await swRegRef.current.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey
-              });
-
-              // Send subscription to backend
-              await fetch(`${API_BASE_URL}/api/push/subscribe`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(subscription)
-              });
-              console.log('Registered background Web Push subscription!');
-            }
-          } catch (e) {
-            console.error('Web Push subscription error:', e);
-          }
+        const reg = swRegRef.current || (await navigator.serviceWorker?.ready);
+        if (reg) {
+          syncWebPushSubscription(reg);
         }
       } else {
         alert('Notification permission was denied. Please allow notifications in your browser/device settings.');
@@ -149,13 +167,17 @@ export default function AdminDashboard({ token, username, onLogout }) {
     // Trigger Device OS Native System Notification
     if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
       try {
+        const baseUrl = import.meta.env.BASE_URL || '/';
+        const iconUrl = `${baseUrl}favicon.jpeg`.replace(/\/\//g, '/');
+
         const notifOptions = {
           body,
-          icon: './favicon.svg',
-          badge: './favicon.svg',
-          vibrate: [200, 100, 200],
-          tag: 'portfolio-system-alert',
-          renotify: true
+          icon: iconUrl,
+          badge: iconUrl,
+          vibrate: [300, 100, 300, 100, 300],
+          tag: 'portfolio-system-alert-' + Date.now(),
+          renotify: true,
+          requireInteraction: true
         };
 
         if (swRegRef.current && swRegRef.current.showNotification) {
