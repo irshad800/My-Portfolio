@@ -4249,6 +4249,17 @@ button {
   font-size: 1.2rem;
 }
 
+.device-badge {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: inline-block;
+}
+
 .progress-bar-wrap {
   display: flex;
   align-items: center;

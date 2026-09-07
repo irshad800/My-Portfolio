@@ -17,6 +17,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState({
     stats: { totalVisits: 0, totalMessages: 0, unreadMessages: 0, uniqueCountriesCount: 0 },
+    devices: { desktop: 0, mobile: 0, tablet: 0 },
     countries: [],
     recentVisitors: []
   });
@@ -36,7 +37,12 @@ export default function AdminDashboard({ token, username, onLogout }) {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setAnalyticsData(data);
+        setAnalyticsData({
+          stats: data.stats || { totalVisits: 0, totalMessages: 0, unreadMessages: 0, uniqueCountriesCount: 0 },
+          devices: data.devices || { desktop: 0, mobile: 0, tablet: 0 },
+          countries: data.countries || [],
+          recentVisitors: data.recentVisitors || []
+        });
       }
     } catch (err) {
       console.error('Failed to fetch analytics:', err);
@@ -73,8 +79,8 @@ export default function AdminDashboard({ token, username, onLogout }) {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
-        fetchMessages();
         fetchAnalytics();
+        fetchMessages();
       }
     } catch (err) {
       console.error('Error updating message:', err);
@@ -90,8 +96,8 @@ export default function AdminDashboard({ token, username, onLogout }) {
       });
       if (res.ok) {
         if (selectedMessage && selectedMessage._id === id) setSelectedMessage(null);
-        fetchMessages();
         fetchAnalytics();
+        fetchMessages();
       }
     } catch (err) {
       console.error('Error deleting message:', err);
@@ -125,6 +131,16 @@ export default function AdminDashboard({ token, username, onLogout }) {
   };
 
   const totalVisits = analyticsData.stats.totalVisits || 1;
+  const desktopCount = analyticsData.devices?.desktop || 0;
+  const mobileCount = analyticsData.devices?.mobile || 0;
+  const tabletCount = analyticsData.devices?.tablet || 0;
+
+  const getDeviceIcon = (deviceType) => {
+    if (deviceType === 'Mobile') return '📱 Mobile';
+    if (deviceType === 'Tablet') return '📟 Tablet';
+    if (deviceType === 'Desktop') return '💻 Desktop (PC)';
+    return '🌐 Unknown';
+  };
 
   return (
     <div className="admin-dashboard-layout">
@@ -142,7 +158,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
             className={`admin-nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
             onClick={() => setActiveTab('analytics')}
           >
-            📊 Country Analytics & Visitors
+            📊 Country & Device Analytics
           </button>
           <button 
             className={`admin-nav-item ${activeTab === 'inbox' ? 'active' : ''}`}
@@ -168,7 +184,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
         <header className="admin-header">
           <div>
             <h1>Portfolio Executive Dashboard</h1>
-            <p>Real-time MongoDB Visitor Geolocation & Contact Message Control</p>
+            <p>Real-time MongoDB Geolocation, Device Analytics & Contact Inbox</p>
           </div>
           <button className="btn btn-outline" onClick={() => { fetchAnalytics(); fetchMessages(); }}>
             🔄 Refresh Data
@@ -204,6 +220,20 @@ export default function AdminDashboard({ token, username, onLogout }) {
                     <div>
                       <h3>{analyticsData.stats.uniqueCountriesCount}</h3>
                       <p>Countries Reached</p>
+                    </div>
+                  </div>
+                  <div className="metric-card glass">
+                    <span className="metric-icon">💻</span>
+                    <div>
+                      <h3>{desktopCount}</h3>
+                      <p>Desktop / PC Users</p>
+                    </div>
+                  </div>
+                  <div className="metric-card glass">
+                    <span className="metric-icon">📱</span>
+                    <div>
+                      <h3>{mobileCount}</h3>
+                      <p>Mobile Users</p>
                     </div>
                   </div>
                   <div className="metric-card glass">
@@ -277,6 +307,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
                       <thead>
                         <tr>
                           <th>Flag & Country</th>
+                          <th>Device Type</th>
                           <th>City / Region</th>
                           <th>IP Address</th>
                           <th>Page Path</th>
@@ -288,6 +319,9 @@ export default function AdminDashboard({ token, username, onLogout }) {
                           <tr key={i}>
                             <td>
                               <span className="flag-emoji">{getCountryFlag(v.countryCode)}</span> {v.country}
+                            </td>
+                            <td>
+                              <span className="device-badge">{getDeviceIcon(v.deviceType)}</span>
                             </td>
                             <td>{v.city}, {v.region}</td>
                             <td><code>{v.ip}</code></td>

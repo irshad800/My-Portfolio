@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { FaWhatsapp, FaEnvelope, FaPhone } from 'react-icons/fa';
 import Preloader from './components/Preloader';
 import ParticleCanvas from './components/ParticleCanvas';
@@ -39,6 +39,9 @@ function HomePage({ onDownloadCV }) {
 export default function App() {
   const [showCV, setShowCV] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname.startsWith('/admin') || window.location.hash.includes('admin');
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 992);
@@ -49,6 +52,7 @@ export default function App() {
 
   // Automatic silent visitor geolocation logging
   useEffect(() => {
+    if (isAdminRoute) return; // Don't log admin panel visits as regular portfolio visitors
     const logVisit = async () => {
       try {
         await fetch(`${API_BASE_URL}/api/visit`, {
@@ -61,45 +65,47 @@ export default function App() {
       }
     };
     logVisit();
-  }, []);
+  }, [isAdminRoute]);
 
   return (
     <>
       <Preloader />
-      {!isMobile && <CustomCursor />}
+      {!isMobile && !isAdminRoute && <CustomCursor />}
       <ParticleCanvas />
       
       {/* Premium ambient decorative glow fields */}
       <div className="ambient-glow glow-top-right" />
       <div className="ambient-glow glow-bottom-left" />
 
-      <Navbar onDownloadCV={() => setShowCV(true)} />
+      {!isAdminRoute && <Navbar onDownloadCV={() => setShowCV(true)} />}
 
-      <div className="floating-socials" aria-label="Quick contact links">
-        <a
-          href="tel:+971558421678"
-          className="social-link call"
-          aria-label="Call phone number"
-        >
-          <FaPhone />
-        </a>
-        <a
-          href="https://wa.me/971558421678"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="social-link whatsapp"
-          aria-label="Contact via WhatsApp"
-        >
-          <FaWhatsapp />
-        </a>
-        <a
-          href="mailto:irshadvp800@gmail.com"
-          className="social-link gmail"
-          aria-label="Send an email"
-        >
-          <FaEnvelope />
-        </a>
-      </div>
+      {!isAdminRoute && (
+        <div className="floating-socials" aria-label="Quick contact links">
+          <a
+            href="tel:+971558421678"
+            className="social-link call"
+            aria-label="Call phone number"
+          >
+            <FaPhone />
+          </a>
+          <a
+            href="https://wa.me/971558421678"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="social-link whatsapp"
+            aria-label="Contact via WhatsApp"
+          >
+            <FaWhatsapp />
+          </a>
+          <a
+            href="mailto:irshadvp800@gmail.com"
+            className="social-link gmail"
+            aria-label="Send an email"
+          >
+            <FaEnvelope />
+          </a>
+        </div>
+      )}
 
       <Routes>
         <Route path="/" element={<HomePage onDownloadCV={() => setShowCV(true)} />} />
