@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../../config/api';
 
 // Helper function to convert ISO country code to flag emoji
 function getCountryFlag(code) {
@@ -30,7 +31,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   const fetchAnalytics = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/analytics', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/analytics`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -44,7 +45,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/messages', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -67,7 +68,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   const toggleMessageRead = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/messages/${id}/read`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/messages/${id}/read`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -83,7 +84,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const deleteMessage = async (id) => {
     if (!window.confirm('Are you sure you want to delete this message?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/messages/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/admin/messages/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -101,7 +102,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
     e.preventDefault();
     setSettingsStatus('updating');
     try {
-      const res = await fetch('http://localhost:5000/api/admin/change-password', {
+      const res = await fetch(`${API_BASE_URL}/api/admin/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

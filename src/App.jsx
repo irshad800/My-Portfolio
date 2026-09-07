@@ -18,6 +18,8 @@ import GalleryPage from './components/GalleryPage';
 
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
+import { API_BASE_URL } from './config/api';
+
 function HomePage({ onDownloadCV }) {
   return (
     <>
@@ -49,8 +51,7 @@ export default function App() {
   useEffect(() => {
     const logVisit = async () => {
       try {
-        const backendUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://portfoliobackend-39ou.onrender.com';
-        await fetch(`${backendUrl}/api/visit`, {
+        await fetch(`${API_BASE_URL}/api/visit`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ path: window.location.pathname })

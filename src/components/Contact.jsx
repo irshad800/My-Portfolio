@@ -3,6 +3,8 @@ import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { personalInfo } from '../data/portfolioData';
 import { FaLinkedin, FaGithub, FaBehance, FaInstagram, FaFacebook, FaGlobe } from 'react-icons/fa';
 
+import { API_BASE_URL } from '../config/api';
+
 export default function Contact() {
   const [ref, vis] = useScrollAnimation();
   const [status, setStatus] = useState('');
@@ -13,8 +15,7 @@ export default function Contact() {
     const fd = new FormData(e.target);
     const data = Object.fromEntries(fd.entries());
     try {
-      const backendUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://portfoliobackend-39ou.onrender.com';
-      const res = await fetch(`${backendUrl}/api/contact`, {
+      const res = await fetch(`${API_BASE_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
