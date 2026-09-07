@@ -40,6 +40,17 @@ function playNotificationTone(type = 'visit') {
   }
 }
 
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 export default function AdminDashboard({ token, username, onLogout }) {
   const [activeTab, setActiveTab] = useState('analytics'); // analytics, inbox, settings
   const [loading, setLoading] = useState(true);
@@ -92,7 +103,35 @@ export default function AdminDashboard({ token, username, onLogout }) {
       const perm = await Notification.requestPermission();
       setNotificationPermission(perm);
       if (perm === 'granted') {
-        notifyAdmin('🔔 System Notifications Activated!', 'Your device will now show OS native system notifications for new visits and messages.');
+        notifyAdmin('🔔 System Notifications Activated!', 'Your device will now show OS native system notifications even when Chrome is closed.');
+        
+        // Register Web Push Subscription for background alerts even when Chrome is closed
+        if ('serviceWorker' in navigator && swRegRef.current) {
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/push/vapid-public-key`);
+            const data = await res.json();
+            if (data.success && data.publicKey) {
+              const applicationServerKey = urlBase64ToUint8Array(data.publicKey);
+              const subscription = await swRegRef.current.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey
+              });
+
+              // Send subscription to backend
+              await fetch(`${API_BASE_URL}/api/push/subscribe`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(subscription)
+              });
+              console.log('Registered background Web Push subscription!');
+            }
+          } catch (e) {
+            console.error('Web Push subscription error:', e);
+          }
+        }
       } else {
         alert('Notification permission was denied. Please allow notifications in your browser/device settings.');
       }
