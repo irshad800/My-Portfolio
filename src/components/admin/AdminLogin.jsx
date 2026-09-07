@@ -74,10 +74,6 @@ export default function AdminLogin({ onLoginSuccess }) {
             />
           </div>
 
-          <div className="credentials-hint">
-            💡 Initial Setup Credentials: Username: <code>admin</code> | Password: <code>admin123</code>
-          </div>
-
           <button type="submit" className="btn btn-primary admin-login-btn" disabled={loading}>
             {loading ? 'Authenticating...' : 'Sign In to Dashboard →'}
           </button>

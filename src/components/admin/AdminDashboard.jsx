@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../../config/api';
 
@@ -10,6 +10,34 @@ function getCountryFlag(code) {
     .split('')
     .map(char => 127397 + char.charCodeAt(0));
   return String.fromCodePoint(...codePoints);
+}
+
+// Web Audio API dual-tone notification chime (synthesized tone)
+function playNotificationTone(type = 'visit') {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    if (type === 'message') {
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
+      osc.frequency.exponentialRampToValueAtTime(987.77, ctx.currentTime + 0.15); // B5
+    } else {
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.15); // G5
+    }
+
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  } catch (e) {
+    // Audio blocked or not supported
+  }
 }
 
 export default function AdminDashboard({ token, username, onLogout }) {
@@ -24,19 +52,83 @@ export default function AdminDashboard({ token, username, onLogout }) {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
+  // Live Notification & Toast State
+  const [notificationPermission, setNotificationPermission] = useState(
+    typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'denied'
+  );
+  const [toastNotification, setToastNotification] = useState(null);
+  const prevDataRef = useRef({ visits: null, messages: null });
+
   // Change Password Form State
   const [newUsername, setNewUsername] = useState(username || 'admin');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [settingsStatus, setSettingsStatus] = useState('');
 
-  const fetchAnalytics = async () => {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const showToast = (title, body) => {
+    setToastNotification({ title, body });
+    setTimeout(() => {
+      setToastNotification(null);
+    }, 6000);
+  };
+
+  const requestNotificationPermission = async () => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      const perm = await Notification.requestPermission();
+      setNotificationPermission(perm);
+      if (perm === 'granted') {
+        showToast('🔔 Live Notifications Activated!', 'You will receive mobile & desktop push alerts for new visits and messages.');
+        try {
+          new Notification('🔔 Notifications Enabled!', {
+            body: 'Live alerts active for new portfolio visitors and contact messages.',
+          });
+        } catch (e) {}
+      }
+    }
+  };
+
+  const notifyAdmin = (title, body, type = 'visit') => {
+    playNotificationTone(type);
+    showToast(title, body);
+
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(title, { body });
+      } catch (err) {
+        console.log('Push notification error:', err);
+      }
+    }
+  };
+
+  const pollAnalytics = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/admin/analytics`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       if (res.ok && data.success) {
+        const newVisits = data.stats.totalVisits || 0;
+        const newMessagesCount = data.stats.totalMessages || 0;
+        const latestVisitor = data.recentVisitors && data.recentVisitors[0];
+
+        // Trigger notification on NEW VISITS
+        if (prevDataRef.current.visits !== null && newVisits > prevDataRef.current.visits) {
+          const location = latestVisitor ? `${latestVisitor.country} (${latestVisitor.deviceType || 'Mobile'})` : 'New Location';
+          notifyAdmin('👁️ New Visitor Alert!', `New visit detected from ${location}`, 'visit');
+        }
+
+        // Trigger notification on NEW MESSAGES
+        if (prevDataRef.current.messages !== null && newMessagesCount > prevDataRef.current.messages) {
+          notifyAdmin('📩 New Contact Message!', 'Someone just sent a contact message on your portfolio!', 'message');
+        }
+
+        prevDataRef.current = {
+          visits: newVisits,
+          messages: newMessagesCount
+        };
+
         setAnalyticsData({
           stats: data.stats || { totalVisits: 0, totalMessages: 0, unreadMessages: 0, uniqueCountriesCount: 0 },
           devices: data.devices || { desktop: 0, mobile: 0, tablet: 0 },
@@ -66,10 +158,18 @@ export default function AdminDashboard({ token, username, onLogout }) {
   useEffect(() => {
     const loadAll = async () => {
       setLoading(true);
-      await Promise.all([fetchAnalytics(), fetchMessages()]);
+      await Promise.all([pollAnalytics(), fetchMessages()]);
       setLoading(false);
     };
     loadAll();
+
+    // Auto-poll every 6 seconds for real-time mobile/desktop alerts
+    const timer = setInterval(() => {
+      pollAnalytics();
+      fetchMessages();
+    }, 6000);
+
+    return () => clearInterval(timer);
   }, [token]);
 
   const toggleMessageRead = async (id) => {
@@ -79,7 +179,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
-        fetchAnalytics();
+        pollAnalytics();
         fetchMessages();
       }
     } catch (err) {
@@ -96,7 +196,7 @@ export default function AdminDashboard({ token, username, onLogout }) {
       });
       if (res.ok) {
         if (selectedMessage && selectedMessage._id === id) setSelectedMessage(null);
-        fetchAnalytics();
+        pollAnalytics();
         fetchMessages();
       }
     } catch (err) {
@@ -130,8 +230,6 @@ export default function AdminDashboard({ token, username, onLogout }) {
     }
   };
 
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   const totalVisits = analyticsData.stats.totalVisits || 1;
   const desktopCount = analyticsData.devices?.desktop ?? analyticsData.devices?.Desktop ?? 0;
   const mobileCount = analyticsData.devices?.mobile ?? analyticsData.devices?.Mobile ?? 0;
@@ -146,17 +244,43 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   return (
     <div className="admin-dashboard-layout">
+      {/* Floating Toast Notification Banner */}
+      <AnimatePresence>
+        {toastNotification && (
+          <motion.div 
+            className="admin-toast-banner"
+            initial={{ opacity: 0, y: -40, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -40, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="toast-header">
+              <strong>{toastNotification.title}</strong>
+              <button onClick={() => setToastNotification(null)}>✕</button>
+            </div>
+            <div className="toast-body">{toastNotification.body}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Mobile Top Header */}
       <div className="admin-mobile-topbar">
         <div className="admin-sidebar-brand">
           <span className="brand-dot">⚡</span> Irshad Admin
         </div>
-        <button 
-          className="admin-mobile-toggle"
-          onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-        >
-          {mobileSidebarOpen ? '✖ Close Menu' : '☰ Admin Menu'}
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {notificationPermission !== 'granted' && (
+            <button className="admin-notif-btn" onClick={requestNotificationPermission}>
+              🔔 Enable Alerts
+            </button>
+          )}
+          <button 
+            className="admin-mobile-toggle"
+            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          >
+            {mobileSidebarOpen ? '✖ Close' : '☰ Menu'}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar Navigation */}
@@ -199,11 +323,19 @@ export default function AdminDashboard({ token, username, onLogout }) {
         <header className="admin-header">
           <div>
             <h1>Executive Dashboard</h1>
-            <p>Geolocation, Device Analytics & Messages</p>
+            <p>Real-time Mobile & Desktop Visitor & Message Tracking</p>
           </div>
-          <button className="btn btn-outline admin-refresh-btn" onClick={() => { fetchAnalytics(); fetchMessages(); }}>
-            🔄 Refresh
-          </button>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <button 
+              className={`admin-notif-btn ${notificationPermission === 'granted' ? 'active' : ''}`}
+              onClick={requestNotificationPermission}
+            >
+              {notificationPermission === 'granted' ? '🟢 Alerts Active' : '🔔 Enable Push Alerts'}
+            </button>
+            <button className="btn btn-outline admin-refresh-btn" onClick={() => { pollAnalytics(); fetchMessages(); }}>
+              🔄 Refresh
+            </button>
+          </div>
         </header>
 
         {loading ? (
