@@ -8,38 +8,38 @@
 }
 
 :root {
-  /* Ultra-Premium Professional Tech Palette */
-  --bg: #020308;
+  /* Ultra-Premium Professional Tech Palette - Cyan & Ocean Blue Theme */
+  --bg: #020617;
   --bg-deep: #000000;
-  --card-bg: rgba(8, 10, 20, 0.7);
-  --card-border: rgba(255, 255, 255, 0.07);
-  --card-border-glow: rgba(99, 102, 241, 0.4);
+  --card-bg: rgba(15, 23, 42, 0.7);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-border-glow: rgba(6, 182, 212, 0.4);
 
-  --text: #f0f4ff;
-  --text-dim: #8892b0;
+  --text: #f1f5f9;
+  --text-dim: #94a3b8;
   --white: #ffffff;
 
-  --accent: #6366f1;
-  /* Vibrant Indigo */
-  --accent-glow: rgba(99, 102, 241, 0.5);
+  --accent: #06b6d4;
+  /* Electric Cyan */
+  --accent-glow: rgba(6, 182, 212, 0.5);
 
-  --accent2: #a78bfa;
-  /* Electric Violet */
-  --accent2-glow: rgba(167, 139, 250, 0.45);
+  --accent2: #38bdf8;
+  /* Sky Azure */
+  --accent2-glow: rgba(56, 189, 248, 0.45);
 
-  --accent3: #38bdf8;
-  /* Sky Blue */
-  --accent4: #f472b6;
-  /* Hot Pink accent */
-  --accent5: #34d399;
+  --accent3: #0284c7;
+  /* Ocean Blue */
+  --accent4: #3b82f6;
+  /* Royal Blue */
+  --accent5: #10b981;
   /* Emerald Green */
 
   /* Gradients */
-  --grad: linear-gradient(135deg, #6366f1, #a78bfa);
-  --grad-warm: linear-gradient(135deg, #a78bfa, #f472b6);
-  --grad-cool: linear-gradient(135deg, #38bdf8, #6366f1);
-  --grad-emerald: linear-gradient(135deg, #34d399, #38bdf8);
-  --grad-full: linear-gradient(135deg, #6366f1, #a78bfa, #f472b6);
+  --grad: linear-gradient(135deg, #06b6d4, #38bdf8);
+  --grad-warm: linear-gradient(135deg, #38bdf8, #10b981);
+  --grad-cool: linear-gradient(135deg, #0284c7, #06b6d4);
+  --grad-emerald: linear-gradient(135deg, #10b981, #06b6d4);
+  --grad-full: linear-gradient(135deg, #0284c7, #06b6d4, #38bdf8);
 
   /* Fonts */
   --font-display: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

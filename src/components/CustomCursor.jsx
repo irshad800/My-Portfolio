@@ -16,17 +16,17 @@ export default function CustomCursor() {
 
     const onEnter = () => {
       ring.style.transform = 'translate(-50%,-50%) scale(1.4)';
-      ring.style.borderColor = '#f43f5e';
-      ring.style.background = 'rgba(244, 63, 94, 0.04)';
-      dot.style.background = '#f43f5e';
-      dot.style.boxShadow = '0 0 8px rgba(244, 63, 94, 0.5)';
+      ring.style.borderColor = '#38bdf8';
+      ring.style.background = 'rgba(56, 189, 248, 0.08)';
+      dot.style.background = '#38bdf8';
+      dot.style.boxShadow = '0 0 8px rgba(56, 189, 248, 0.6)';
     };
     const onLeave = () => {
       ring.style.transform = 'translate(-50%,-50%) scale(1)';
-      ring.style.borderColor = 'rgba(124, 58, 237, 0.4)';
+      ring.style.borderColor = 'rgba(6, 182, 212, 0.4)';
       ring.style.background = 'transparent';
-      dot.style.background = '#7c3aed';
-      dot.style.boxShadow = '0 0 8px rgba(124, 58, 237, 0.5)';
+      dot.style.background = '#06b6d4';
+      dot.style.boxShadow = '0 0 8px rgba(6, 182, 212, 0.5)';
     };
 
     const addListeners = () => {
@@ -61,13 +61,13 @@ export default function CustomCursor() {
     <>
       <div ref={dotRef} style={{
         position: 'fixed', width: 6, height: 6, borderRadius: '50%',
-        background: '#7c3aed', transform: 'translate(-50%,-50%)',
+        background: '#06b6d4', transform: 'translate(-50%,-50%)',
         zIndex: 9999, pointerEvents: 'none', transition: 'background 0.2s, box-shadow 0.2s',
-        boxShadow: '0 0 8px rgba(124, 58, 237, 0.5)',
+        boxShadow: '0 0 8px rgba(6, 182, 212, 0.5)',
       }} />
       <div ref={ringRef} style={{
         position: 'fixed', width: 28, height: 28, borderRadius: '50%',
-        border: '1.5px solid rgba(124, 58, 237, 0.4)', transform: 'translate(-50%,-50%)',
+        border: '1.5px solid rgba(6, 182, 212, 0.4)', transform: 'translate(-50%,-50%)',
         zIndex: 9998, pointerEvents: 'none',
         transition: 'transform .25s cubic-bezier(0.25,0.8,0.25,1), border-color 0.2s, background 0.2s',
       }} />

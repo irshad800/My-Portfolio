@@ -8,7 +8,7 @@ export default function ParticleCanvas() {
     const ctx = canvas.getContext('2d');
     let animId;
     let particles = [];
-    const colors = ['#7c3aed', '#06b6d4', '#10b981', '#6366f1', '#8b5cf6'];
+    const colors = ['#06b6d4', '#38bdf8', '#0284c7', '#3b82f6', '#10b981'];
     
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
@@ -76,8 +76,8 @@ export default function ParticleCanvas() {
       rotateY(angle) {
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
-        const x1 = this.x * cos - this.z * sin;
-        const z1 = this.z * cos + this.x * sin;
+        const x1 = this.x * cos + this.z * sin;
+        const z1 = this.z * cos - this.x * sin;
         this.x = x1;
         this.z = z1;
       }
@@ -161,7 +161,7 @@ export default function ParticleCanvas() {
             
             // Fade line color based on depth and 3D proximity
             const lineOpacity = (1 - dist3D / 180) * 0.08 * scaleLine;
-            ctx.strokeStyle = `rgba(124, 58, 237, ${Math.max(0, lineOpacity)})`;
+            ctx.strokeStyle = `rgba(6, 182, 212, ${Math.max(0, lineOpacity)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
