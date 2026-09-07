@@ -51,7 +51,7 @@ export default function Contact() {
             </div>
             <div className="contact-item glass">
               <div className="icon">📞</div>
-              <div><h4>Phone</h4><a href={`tel:${personalInfo.phone}`}>{personalInfo.phone}</a></div>
+              <div><h4>Phone</h4><a href={`tel:${personalInfo.phone.replace(/\s+/g, '')}`}>{personalInfo.phone}</a></div>
             </div>
           </div>
           <div className="contact-socials" style={{ marginTop: 24 }}>

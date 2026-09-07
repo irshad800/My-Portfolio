@@ -4,7 +4,7 @@ export const personalInfo = {
   subtitle: 'iGaming Development Specialist | Mobile & Web Platforms',
   location: 'Dubai, UAE',
   email: 'irshadvp800@gmail.com',
-  phone: '+971 563020773',
+  phone: '+971 558421678',
   bio: 'I specialize in full-stack development, cloud architecture, and iGaming platforms — blending scalable backend systems with immersive digital experiences.',
   aboutLong: 'Turning ideas into intelligent digital solutions — from high-performance iGaming platforms to scalable mobile apps. With over 3 years in the tech scene and currently building in Dubai, I merge software engineering with cloud architecture to craft seamless, user-focused products that make an impact.',
   socials: {

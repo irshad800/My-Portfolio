@@ -92,14 +92,17 @@ export default function Hero() {
         <div className="hero-orb hero-orb-2" />
         <div className="hero-orb hero-orb-3" />
         <div className="hero-grid" />
+        {/* Decorative corner accents */}
+        <div className="hero-corner-tl" />
+        <div className="hero-corner-br" />
       </div>
       <div className="container">
         <div className="hero-content" style={{ animation: 'slide-up .8s ease forwards' }}>
           <div className="hero-badge">
             <span className="dot" />
-            Available for work
+            Available for work — Dubai, UAE
           </div>
-          <p className="hero-name" style={{ animationDelay: '.2s' }}>Hi, I'm {personalInfo.name} 👋</p>
+          <p className="hero-name" style={{ animationDelay: '.2s' }}>Hi, I'm <em>{personalInfo.name}</em> 👋</p>
           <h1 className="hero-heading">
             <Typewriter words={roles} speed={80} pause={2500} />
           </h1>

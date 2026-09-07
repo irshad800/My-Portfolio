@@ -99,11 +99,22 @@ export default function Expertise() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCategory}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                style={{ width: '100%' }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.25 }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={(e, { offset }) => {
+                  const swipe = offset.x;
+                  if (swipe < -50 && activeCategory < expertise.length - 1) {
+                    setActiveCategory(activeCategory + 1);
+                  } else if (swipe > 50 && activeCategory > 0) {
+                    setActiveCategory(activeCategory - 1);
+                  }
+                }}
+                style={{ width: '100%', touchAction: 'pan-y' }}
               >
                 <ExpertiseCard item={expertise[activeCategory]} delay={0} isMobileActive={true} />
               </motion.div>
@@ -112,6 +123,72 @@ export default function Expertise() {
             expertise.map((e, i) => <ExpertiseCard key={e.title} item={e} delay={i * 80} />)
           )}
         </div>
+
+        {/* BOTTOM MOBILE CONTROLS & SWIPE HINT - AT THE BOTTOM WHERE USER READS */}
+        {isMobile && (
+          <div className="mobile-bottom-controls">
+            <div className="swipe-banner">
+              <span className="swipe-icon">👈</span>
+              <span className="swipe-text">SWIPE CARD OR TAP BUTTONS ({activeCategory + 1}/{expertise.length})</span>
+              <span className="swipe-icon">👉</span>
+            </div>
+
+            <div className="mobile-carousel-controls">
+              <button 
+                className="carousel-nav-btn" 
+                onClick={() => {
+                  const newCat = Math.max(0, activeCategory - 1);
+                  setActiveCategory(newCat);
+                }}
+                disabled={activeCategory === 0}
+                aria-label="Previous Category"
+              >
+                ‹
+              </button>
+
+              <div className="dots-indicator">
+                {expertise.map((_, i) => (
+                  <span 
+                    key={i} 
+                    className={`dot ${activeCategory === i ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(i)}
+                  />
+                ))}
+              </div>
+
+              <button 
+                className="carousel-nav-btn" 
+                onClick={() => {
+                  const newCat = (activeCategory + 1) % expertise.length;
+                  setActiveCategory(newCat);
+                }}
+                aria-label="Next Category"
+              >
+                ›
+              </button>
+            </div>
+
+            <button 
+              className="bottom-next-category-btn"
+              onClick={() => {
+                const newCat = (activeCategory + 1) % expertise.length;
+                setActiveCategory(newCat);
+                const sectionEl = document.getElementById('expertise');
+                if (sectionEl) {
+                  const yOffset = -70;
+                  const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+              }}
+            >
+              {activeCategory < expertise.length - 1 ? (
+                <>Next: <span>{expertise[activeCategory + 1].title}</span> →</>
+              ) : (
+                <>Back to: <span>{expertise[0].title}</span> ↺</>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -33,7 +33,7 @@ export default function GalleryPage() {
 
         <div className="section-header" style={{ animation: 'slide-up 0.8s ease', textAlign: 'center', marginBottom: '40px' }}>
           <span className="section-label" style={{ justifyContent: 'center' }}>Portfolio Assets</span>
-          <h1 className="hero-heading" style={{ fontSize: '3rem', marginBottom: '10px' }}>Full <span>Gallery</span></h1>
+          <h1 className="hero-heading" style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.4rem)', marginBottom: '10px' }}>Full <span>Gallery</span></h1>
           <p className="hero-desc" style={{ margin: '0 auto' }}>Explore screenshots and visual mockups of premium iGaming concepts and apps.</p>
         </div>
 

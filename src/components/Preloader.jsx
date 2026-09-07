@@ -33,8 +33,8 @@ export default function Preloader() {
       pointerEvents: done ? 'none' : 'all',
     }}>
       <div style={{
-        fontFamily: "'Syne', sans-serif", fontSize: 'clamp(2rem, 5vw, 3rem)',
-        fontWeight: 700, marginBottom: 20, color: '#fff', letterSpacing: '-1px',
+        fontFamily: "var(--font-display)", fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)',
+        fontWeight: 700, marginBottom: 18, color: '#fff', letterSpacing: '-0.5px',
       }}>
         <span style={{
           background: 'linear-gradient(135deg, #7c3aed, #f43f5e)',

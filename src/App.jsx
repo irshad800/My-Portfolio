@@ -59,14 +59,14 @@ export default function App() {
 
       <div className="floating-socials" aria-label="Quick contact links">
         <a
-          href="tel:+971563020773"
+          href="tel:+971558421678"
           className="social-link call"
           aria-label="Call phone number"
         >
           <FaPhone />
         </a>
         <a
-          href="https://wa.me/971563020773"
+          href="https://wa.me/971558421678"
           target="_blank"
           rel="noopener noreferrer"
           className="social-link whatsapp"
