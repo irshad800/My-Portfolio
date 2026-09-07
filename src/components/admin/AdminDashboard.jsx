@@ -67,6 +67,19 @@ export default function AdminDashboard({ token, username, onLogout }) {
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+  const swRegRef = useRef(null);
+
+  useEffect(() => {
+    // Register Service Worker for Mobile & OS Native System Notifications
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').then((reg) => {
+        swRegRef.current = reg;
+      }).catch((err) => {
+        console.log('SW registration error:', err);
+      });
+    }
+  }, []);
+
   const showToast = (title, body) => {
     setToastNotification({ title, body });
     setTimeout(() => {
@@ -79,12 +92,9 @@ export default function AdminDashboard({ token, username, onLogout }) {
       const perm = await Notification.requestPermission();
       setNotificationPermission(perm);
       if (perm === 'granted') {
-        showToast('🔔 Live Notifications Activated!', 'You will receive mobile & desktop push alerts for new visits and messages.');
-        try {
-          new Notification('🔔 Notifications Enabled!', {
-            body: 'Live alerts active for new portfolio visitors and contact messages.',
-          });
-        } catch (e) {}
+        notifyAdmin('🔔 System Notifications Activated!', 'Your device will now show OS native system notifications for new visits and messages.');
+      } else {
+        alert('Notification permission was denied. Please allow notifications in your browser/device settings.');
       }
     }
   };
@@ -93,9 +103,27 @@ export default function AdminDashboard({ token, username, onLogout }) {
     playNotificationTone(type);
     showToast(title, body);
 
+    // Trigger Device OS Native System Notification
     if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
       try {
-        new Notification(title, { body });
+        const notifOptions = {
+          body,
+          icon: './favicon.svg',
+          badge: './favicon.svg',
+          vibrate: [200, 100, 200],
+          tag: 'portfolio-system-alert',
+          renotify: true
+        };
+
+        if (swRegRef.current && swRegRef.current.showNotification) {
+          swRegRef.current.showNotification(title, notifOptions);
+        } else if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, notifOptions);
+          });
+        } else {
+          new Notification(title, notifOptions);
+        }
       } catch (err) {
         console.log('Push notification error:', err);
       }
@@ -325,13 +353,22 @@ export default function AdminDashboard({ token, username, onLogout }) {
             <h1>Executive Dashboard</h1>
             <p>Real-time Mobile & Desktop Visitor & Message Tracking</p>
           </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <button 
               className={`admin-notif-btn ${notificationPermission === 'granted' ? 'active' : ''}`}
               onClick={requestNotificationPermission}
             >
-              {notificationPermission === 'granted' ? '🟢 Alerts Active' : '🔔 Enable Push Alerts'}
+              {notificationPermission === 'granted' ? '🟢 System Alerts Active' : '🔔 Enable System Alerts'}
             </button>
+            {notificationPermission === 'granted' && (
+              <button 
+                className="admin-notif-btn" 
+                style={{ background: 'rgba(56, 189, 248, 0.15)', borderColor: 'rgba(56, 189, 248, 0.3)', color: 'var(--accent2)' }}
+                onClick={() => notifyAdmin('📱 System Test Alert!', 'This is a test notification in your device status bar / system notification tray!')}
+              >
+                📱 Test System Alert
+              </button>
+            )}
             <button className="btn btn-outline admin-refresh-btn" onClick={() => { pollAnalytics(); fetchMessages(); }}>
               🔄 Refresh
             </button>
