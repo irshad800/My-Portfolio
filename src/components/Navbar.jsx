@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useNavScroll } from '../hooks/useScrollAnimation';
 import { navLinks, personalInfo } from '../data/portfolioData';
 
@@ -7,23 +7,41 @@ export default function Navbar({ onDownloadCV }) {
   const { scrolled, activeSection } = useNavScroll();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const close = () => setMenuOpen(false);
 
   const isGalleryPage = location.pathname === '/gallery';
 
-  const getHref = (href) => {
-    if (isGalleryPage) {
-      if (href.startsWith('#')) return `/${href}`;
-      return href;
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    close();
+
+    if (href === '/gallery') {
+      navigate('/gallery');
+      return;
     }
-    return href;
+
+    const targetId = href.replace('#', '').replace(/^\//, '');
+
+    if (isGalleryPage) {
+      navigate('/', { state: { scrollTo: targetId } });
+      return;
+    }
+
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: targetId } });
+    }
   };
 
   const isActive = (href) => {
     if (href === '/gallery') return isGalleryPage;
     if (isGalleryPage) return false;
-    return activeSection === href.slice(1);
+    const targetId = href.replace('#', '').replace(/^\//, '');
+    return activeSection === targetId;
   };
 
   return (
@@ -33,19 +51,21 @@ export default function Navbar({ onDownloadCV }) {
           <Link to="/" className="nav-logo" onClick={close}>Irshad<span>.</span></Link>
           <div className="nav-links">
             {navLinks.map(l => {
-              const isRoute = l.href.startsWith('/');
+              const isRoute = l.href === '/gallery';
               return isRoute ? (
                 <Link 
                   key={l.href} 
-                  to={getHref(l.href)} 
+                  to={l.href} 
                   className={isActive(l.href) ? 'active' : ''}
+                  onClick={close}
                 >
                   {l.label}
                 </Link>
               ) : (
                 <a 
                   key={l.href} 
-                  href={getHref(l.href)} 
+                  href={l.href} 
+                  onClick={(e) => handleNavClick(e, l.href)}
                   className={isActive(l.href) ? 'active' : ''}
                 >
                   {l.label}
@@ -83,16 +103,16 @@ export default function Navbar({ onDownloadCV }) {
         {/* Navigation Links */}
         <div className="mobile-menu-nav">
           {navLinks.map((l, i) => {
-            const isRoute = l.href.startsWith('/');
+            const isRoute = l.href === '/gallery';
             const linkClass = `mobile-nav-link${isActive(l.href) ? ' active' : ''}`;
             return isRoute ? (
-              <Link key={l.href} to={getHref(l.href)} className={linkClass} onClick={close} style={{ animationDelay: `${0.05 + i * 0.04}s` }}>
+              <Link key={l.href} to={l.href} className={linkClass} onClick={close} style={{ animationDelay: `${0.05 + i * 0.04}s` }}>
                 <span className="mobile-nav-index">0{i + 1}</span>
                 <span className="mobile-nav-label">{l.label}</span>
                 <span className="mobile-nav-arrow">→</span>
               </Link>
             ) : (
-              <a key={l.href} href={getHref(l.href)} className={linkClass} onClick={close} style={{ animationDelay: `${0.05 + i * 0.04}s` }}>
+              <a key={l.href} href={l.href} onClick={(e) => handleNavClick(e, l.href)} className={linkClass} style={{ animationDelay: `${0.05 + i * 0.04}s` }}>
                 <span className="mobile-nav-index">0{i + 1}</span>
                 <span className="mobile-nav-label">{l.label}</span>
                 <span className="mobile-nav-arrow">→</span>

@@ -85,6 +85,14 @@ export default function Hero() {
     setTilt({ x: 0, y: 0 });
   };
 
+  const handleScrollTo = (e, targetId) => {
+    e.preventDefault();
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="hero" id="hero">
       <div className="hero-bg">
@@ -108,10 +116,10 @@ export default function Hero() {
           </h1>
           <p className="hero-desc">{personalInfo.bio}</p>
           <div className="hero-buttons">
-            <a href="#projects" className="btn btn-primary btn-glow">
+            <a href="#projects" onClick={(e) => handleScrollTo(e, 'projects')} className="btn btn-primary btn-glow">
               <span className="btn-shine" />View Projects <span>→</span>
             </a>
-            <a href="#contact" className="btn btn-outline">
+            <a href="#contact" onClick={(e) => handleScrollTo(e, 'contact')} className="btn btn-outline">
               Let's Talk <span>💬</span>
             </a>
           </div>

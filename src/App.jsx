@@ -15,6 +15,7 @@ import Projects from './components/Projects';
 import GallerySection from './components/GallerySection';
 import Contact from './components/Contact';
 import GalleryPage from './components/GalleryPage';
+import CVModal from './components/CVModal';
 
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
@@ -49,6 +50,29 @@ export default function App() {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  // Auto-scroll to target section on route/hash change
+  useEffect(() => {
+    if (isAdminRoute) return;
+
+    let targetId = '';
+    if (location.state && location.state.scrollTo) {
+      targetId = location.state.scrollTo;
+    } else if (location.pathname && location.pathname !== '/' && location.pathname !== '/gallery') {
+      targetId = location.pathname.replace(/^\//, '');
+    } else if (window.location.hash) {
+      targetId = window.location.hash.replace('#', '').replace(/^\//, '');
+    }
+
+    if (targetId && targetId !== 'admin' && targetId !== 'gallery') {
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+    }
+  }, [location, isAdminRoute]);
 
   // Automatic silent visitor geolocation logging
   useEffect(() => {
@@ -111,6 +135,8 @@ export default function App() {
         <Route path="/" element={<HomePage onDownloadCV={() => setShowCV(true)} />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/admin" element={<ProtectedRoute />} />
+        {/* Section & fallback wildcard routes so paths like /contact, /projects, /about, /skills, /expertise, etc never 404 or show blank */}
+        <Route path="*" element={<HomePage onDownloadCV={() => setShowCV(true)} />} />
       </Routes>
 
       {showCV && <CVModal onClose={() => setShowCV(false)} />}
